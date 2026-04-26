@@ -10,7 +10,8 @@
     "composite": true,
     "noEmit": false,
     "emitDeclarationOnly": true,
-    "outDir": "./dist-tsc-node"
+    "outDir": "./dist-tsc-node",
+    "types": ["node"]
   },
   "include": ["vite.config.ts"]
 }
