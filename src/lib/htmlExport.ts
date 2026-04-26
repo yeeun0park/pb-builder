@@ -1,4 +1,6 @@
-import html2canvas from "html2canvas";
+// html2canvas is dynamically imported in captureIframeAsJpeg to keep the
+// initial bundle small (saves ~300kB on first load for users who never
+// export JPG).
 
 export const openPrintView = (html: string, title: string): void => {
   const win = window.open("", "_blank", "width=1280,height=900");
@@ -93,6 +95,7 @@ export const captureIframeAsJpeg = async (
 ): Promise<void> => {
   const doc = iframe.contentDocument;
   if (!doc || !doc.body) throw new Error("프리뷰 iframe을 읽을 수 없습니다");
+  const html2canvas = (await import("html2canvas")).default;
   const canvas = await html2canvas(doc.body, {
     useCORS: true,
     backgroundColor: "#ffffff",

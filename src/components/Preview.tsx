@@ -1,9 +1,9 @@
-import { PDFViewer } from "@react-pdf/renderer";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, lazy, Suspense, useEffect, useState } from "react";
 import { getLogoDataUrl } from "@/lib/assets";
 import { useCampaignStore } from "@/lib/store";
-import { CampaignDocument } from "@/pdf/Document";
 import { HtmlPreview } from "./HtmlPreview";
+
+const PdfPreview = lazy(() => import("./PdfPreview"));
 
 type Props = {
   mode: "auto" | "detail";
@@ -43,12 +43,15 @@ export const Preview = forwardRef<HTMLIFrameElement, Props>(({ mode }, ref) => {
   }
 
   return (
-    <PDFViewer
-      style={{ width: "100%", height: "100%", border: "none" }}
-      showToolbar
+    <Suspense
+      fallback={
+        <div className="flex h-full items-center justify-center text-sm text-fg-muted">
+          PDF 뷰어 로딩 중…
+        </div>
+      }
     >
-      <CampaignDocument campaign={campaign} logoSrc={logoSrc} />
-    </PDFViewer>
+      <PdfPreview campaign={campaign} logoSrc={logoSrc} />
+    </Suspense>
   );
 });
 
