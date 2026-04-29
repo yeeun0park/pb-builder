@@ -1,6 +1,7 @@
 import type { POSCard } from "./posSchema";
 
-export const sampleBabMeokGoPaba: POSCard = {
+// 시안: 밥먹고파바고 3차_POS.jpg (split)
+export const sampleBabMeokGoPaba = {
   layout: "split",
   panelBg: "#F5EFD8",
   textPrimary: "#1A2D5A",
@@ -34,9 +35,10 @@ export const sampleBabMeokGoPaba: POSCard = {
       caption: "파바앱으로\n쿠폰 받으러 가기!",
     },
   ],
-};
+} satisfies POSCard;
 
-export const sampleFamilyMonth: POSCard = {
+// 시안: 가정의달케이크사전예약_POS.jpg (split)
+export const sampleFamilyMonth = {
   layout: "split",
   panelBg: "#E8E5F2",
   textPrimary: "#1A2D5A",
@@ -68,9 +70,10 @@ export const sampleFamilyMonth: POSCard = {
       caption: "파바앱에서 다양한\n가정의 달 케이크 만나보기!",
     },
   ],
-};
+} satisfies POSCard;
 
-export const sampleParanRose: POSCard = {
+// 시안: 파란장미케이크오브제_POS.jpg (split)
+export const sampleParanRose = {
   layout: "split",
   panelBg: "#E8E5F2",
   textPrimary: "#1A2D5A",
@@ -102,14 +105,15 @@ export const sampleParanRose: POSCard = {
       caption: "파바앱에서 한정수량\n사전예약 하기",
     },
   ],
-};
+} satisfies POSCard;
 
-export const sampleMatchaCake: POSCard = {
+// 시안: 저당말차케이크_해피TV.jpg (split)
+export const sampleMatchaCake = {
   layout: "split",
-  panelBg: "#3D6B35",
+  panelBg: "#3D6B35", // 계획서 #4A6B3F → 시안 비교 후 조정. Task 10에서 재미세조정 예정.
   textPrimary: "#FFFFFF",
   textAccent: "#FFFFFF",
-  pillBg: "#4A8C3F",
+  pillBg: "#4A8C3F", // 계획서 원본값 유지 — panelBg와 함께 Task 10 재미세조정 예정.
   pillText: "#FFFFFF",
   blocks: [
     {
@@ -140,9 +144,10 @@ export const sampleMatchaCake: POSCard = {
       caption: "파바앱 혜택받고\n사전예약 하러 가기!",
     },
   ],
-};
+} satisfies POSCard;
 
-export const sampleLafc: POSCard = {
+// 시안: LAFC밋앤그릿_POS.jpg (fullbleed)
+export const sampleLafc = {
   layout: "fullbleed",
   panelBg: "#1E2218",
   textPrimary: "#FFFFFF",
@@ -202,10 +207,10 @@ export const sampleLafc: POSCard = {
       caption: "파바앱 쓰고\n응모하기!",
     },
   ],
-};
+} satisfies POSCard;
 
 export const samplePosCards: Record<string, POSCard> = {
-  bobMeokGoPaba: sampleBabMeokGoPaba,
+  babMeokGoPaba: sampleBabMeokGoPaba,
   familyMonth: sampleFamilyMonth,
   paranRose: sampleParanRose,
   matchaCake: sampleMatchaCake,
