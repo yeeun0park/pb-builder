@@ -1,6 +1,8 @@
 import type { POSCard, POSBlock } from "@/lib/posSchema";
 import { Eyebrow, Title, Highlight, PillRow, TextLine, RankList, QRBlock } from "./posBlocks";
 
+const PANEL_ALPHA_HEX = "E0"; // fullbleed 패널 88% 불투명
+
 type Props = { card: POSCard; logoUrl: string };
 
 export const POSCanvas = ({ card, logoUrl }: Props) => {
@@ -32,10 +34,12 @@ export const POSCanvas = ({ card, logoUrl }: Props) => {
   return (
     <div style={{
       width: 800, height: 600, position: "relative",
-      background: isFullbleed && card.keyVisualUrl ? `url(${card.keyVisualUrl}) center/cover` : "#fff",
+      background: isFullbleed
+        ? (card.keyVisualUrl ? `url(${card.keyVisualUrl}) center/cover` : card.panelBg)
+        : "#fff",
       fontFamily: "PBGothic, sans-serif",
     }}>
-      <div style={{ display: "flex", width: "100%", height: "100%" }}>
+      <div style={{ display: "flex", width: "100%", height: "100%", position: "relative" }}>
         {!isFullbleed && (
           <div style={{
             width: "60%",
@@ -44,8 +48,13 @@ export const POSCanvas = ({ card, logoUrl }: Props) => {
         )}
         <div style={{
           width: "40%",
-          marginLeft: isFullbleed ? "auto" : 0,
-          background: isFullbleed ? `${card.panelBg}E0` : card.panelBg,
+          ...(isFullbleed ? {
+            position: "absolute" as const,
+            right: 0,
+            top: 0,
+            bottom: 0,
+          } : {}),
+          background: isFullbleed ? `${card.panelBg}${PANEL_ALPHA_HEX}` : card.panelBg,
           padding: "32px 28px",
           display: "flex",
           flexDirection: "column",
