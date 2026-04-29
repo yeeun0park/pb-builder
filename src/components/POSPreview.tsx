@@ -16,6 +16,7 @@ export const POSPreview = forwardRef<HTMLIFrameElement>((_, ref) => {
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
     const iframe = iframeRef.current;
     if (!iframe) return;
     const doc = iframe.contentDocument;
@@ -24,6 +25,7 @@ export const POSPreview = forwardRef<HTMLIFrameElement>((_, ref) => {
     const mount = async () => {
       if (!doc.getElementById("pos-style")) {
         const fontCss = await getEmbeddedFontCss();
+        if (cancelled) return;  // race 가드: cleanup 후 도착한 응답 무시
         doc.head.innerHTML = `
           <style id="pos-style">
             ${fontCss}
@@ -41,6 +43,12 @@ export const POSPreview = forwardRef<HTMLIFrameElement>((_, ref) => {
     };
 
     mount();
+
+    return () => {
+      cancelled = true;
+      rootRef.current?.unmount();
+      rootRef.current = null;
+    };
   }, [card, logoUrl]);
 
   return (
