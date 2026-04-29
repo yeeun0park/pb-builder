@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 import { create } from "zustand";
 import { CampaignSchema } from "./schema";
 import type { Campaign, Section, SectionType } from "./types";
+import { POSCardSchema, type POSCard, type POSBlock } from "./posSchema";
 
 const createEmptySection = (type: SectionType): Section => {
   const id = nanoid(8);
@@ -55,6 +56,7 @@ type State = {
   campaign: Campaign;
   selectedSectionId: string | null;
   htmlOutput: string;
+  posCard: POSCard;
 };
 
 type Actions = {
@@ -68,12 +70,18 @@ type Actions = {
   exportJson: () => Campaign;
   setHtmlOutput: (html: string) => void;
   reset: () => void;
+  setPosCard: (card: POSCard) => void;
+  updatePosCardField: <K extends keyof POSCard>(key: K, value: POSCard[K]) => void;
+  addPosBlock: (block: POSBlock) => void;
+  removePosBlock: (id: string) => void;
+  movePosBlock: (id: string, direction: "up" | "down") => void;
 };
 
 export const useCampaignStore = create<State & Actions>((set, get) => ({
   campaign: defaultCampaign(),
   selectedSectionId: null,
   htmlOutput: "",
+  posCard: POSCardSchema.parse({}),
 
   setHtmlOutput: (html) => set({ htmlOutput: html }),
 
@@ -140,5 +148,35 @@ export const useCampaignStore = create<State & Actions>((set, get) => ({
       campaign: defaultCampaign(),
       selectedSectionId: null,
       htmlOutput: "",
+      posCard: POSCardSchema.parse({}),
+    }),
+
+  setPosCard: (card) => set({ posCard: card }),
+
+  updatePosCardField: (key, value) =>
+    set((s) => ({ posCard: { ...s.posCard, [key]: value } })),
+
+  addPosBlock: (block) =>
+    set((s) => ({
+      posCard: { ...s.posCard, blocks: [...s.posCard.blocks, block] },
+    })),
+
+  removePosBlock: (id) =>
+    set((s) => ({
+      posCard: {
+        ...s.posCard,
+        blocks: s.posCard.blocks.filter((b) => b.id !== id),
+      },
+    })),
+
+  movePosBlock: (id, direction) =>
+    set((s) => {
+      const blocks = [...s.posCard.blocks];
+      const idx = blocks.findIndex((b) => b.id === id);
+      if (idx === -1) return s;
+      const target = direction === "up" ? idx - 1 : idx + 1;
+      if (target < 0 || target >= blocks.length) return s;
+      [blocks[idx], blocks[target]] = [blocks[target], blocks[idx]];
+      return { posCard: { ...s.posCard, blocks } };
     }),
 }));
