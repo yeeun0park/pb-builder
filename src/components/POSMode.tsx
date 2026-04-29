@@ -1,10 +1,14 @@
+import type { RefObject } from "react";
 import { useCampaignStore } from "@/lib/store";
 import { readAsDataUrl } from "@/lib/imageUpload";
 import { samplePosCards } from "@/lib/posSamples";
 import type { POSBlock } from "@/lib/posSchema";
+import { captureIframeAsJpeg } from "@/lib/htmlExport";
 import { nanoid } from "nanoid";
 
-export const POSMode = () => {
+type Props = { previewRef: RefObject<HTMLIFrameElement> };
+
+export const POSMode = ({ previewRef }: Props) => {
   const card = useCampaignStore((s) => s.posCard);
   const setCard = useCampaignStore((s) => s.setPosCard);
   const updateField = useCampaignStore((s) => s.updatePosCardField);
@@ -12,6 +16,16 @@ export const POSMode = () => {
   const removeBlock = useCampaignStore((s) => s.removePosBlock);
   const moveBlock = useCampaignStore((s) => s.movePosBlock);
   const updateBlock = useCampaignStore((s) => s.updatePosBlock);
+
+  const exportJpg = async () => {
+    if (!previewRef.current) return;
+    await captureIframeAsJpeg(previewRef.current, {
+      width: 800,
+      height: 600,
+      filename: `pos-${Date.now()}.jpg`,
+      targetSelector: "#pos-root",
+    });
+  };
 
   const onUploadKV = async (file: File) => {
     const dataUrl = await readAsDataUrl(file);
@@ -40,6 +54,16 @@ export const POSMode = () => {
 
   return (
     <div className="flex flex-col gap-4 p-4">
+      <section>
+        <button
+          type="button"
+          onClick={exportJpg}
+          className="w-full rounded bg-theme px-3 py-2 text-sm font-bold text-white hover:opacity-90"
+        >
+          JPG로 저장 (800×600)
+        </button>
+      </section>
+
       <section>
         <h3 className="mb-2 text-sm font-bold">샘플 불러오기</h3>
         <div className="flex flex-wrap gap-1">

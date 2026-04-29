@@ -89,25 +89,45 @@ const triggerDownload = (blob: Blob, filename: string) => {
   setTimeout(() => URL.revokeObjectURL(url), 500);
 };
 
+export interface CaptureOptions {
+  width?: number;
+  height?: number;
+  filename?: string;
+  targetSelector?: string;
+}
+
 export const captureIframeAsJpeg = async (
   iframe: HTMLIFrameElement,
-  filename: string,
+  filenameOrOptions?: string | CaptureOptions,
 ): Promise<void> => {
+  const opts: CaptureOptions =
+    typeof filenameOrOptions === "string"
+      ? { filename: filenameOrOptions }
+      : (filenameOrOptions ?? {});
+
   const doc = iframe.contentDocument;
   if (!doc || !doc.body) throw new Error("프리뷰 iframe을 읽을 수 없습니다");
+
+  const target = opts.targetSelector
+    ? (doc.querySelector(opts.targetSelector) as HTMLElement | null)
+    : doc.body;
+  if (!target) throw new Error("캡처 대상을 찾을 수 없습니다");
+
   const html2canvas = (await import("html2canvas")).default;
-  const canvas = await html2canvas(doc.body, {
+  const canvas = await html2canvas(target, {
     useCORS: true,
     backgroundColor: "#ffffff",
     scale: 2,
-    windowWidth: doc.documentElement.scrollWidth,
-    windowHeight: doc.documentElement.scrollHeight,
+    width: opts.width,
+    height: opts.height,
+    windowWidth: opts.width ?? doc.documentElement.scrollWidth,
+    windowHeight: opts.height ?? doc.documentElement.scrollHeight,
   });
   const blob = await new Promise<Blob | null>((resolve) =>
     canvas.toBlob((b) => resolve(b), "image/jpeg", 0.92),
   );
   if (!blob) throw new Error("JPG 변환 실패");
-  triggerDownload(blob, filename);
+  triggerDownload(blob, opts.filename ?? "export.jpg");
 };
 
 export const downloadHtmlFile = (html: string, filename: string): void => {

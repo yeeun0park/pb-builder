@@ -79,7 +79,7 @@ export const Editor = () => {
       <div className="flex flex-1 overflow-hidden">
         <aside className="flex w-[480px] shrink-0 flex-col overflow-y-auto border-r border-divider bg-white">
           {mode === "pos" ? (
-            <POSMode />
+            <POSMode previewRef={previewRef} />
           ) : mode === "auto" ? (
             <AutoMode onGenerated={() => {}} previewRef={previewRef} />
           ) : htmlOutput ? (
