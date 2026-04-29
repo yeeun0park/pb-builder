@@ -11,6 +11,7 @@ export const POSMode = () => {
   const addBlock = useCampaignStore((s) => s.addPosBlock);
   const removeBlock = useCampaignStore((s) => s.removePosBlock);
   const moveBlock = useCampaignStore((s) => s.movePosBlock);
+  const updateBlock = useCampaignStore((s) => s.updatePosBlock);
 
   const onUploadKV = async (file: File) => {
     const dataUrl = await readAsDataUrl(file);
@@ -180,7 +181,7 @@ export const POSMode = () => {
                   </button>
                 </div>
               </div>
-              <BlockEditor block={b} />
+              <BlockEditor block={b} update={updateBlock} />
             </div>
           ))}
         </div>
@@ -189,26 +190,9 @@ export const POSMode = () => {
   );
 };
 
-const BlockEditor = ({ block }: { block: POSBlock }) => {
-  const update = (next: POSBlock) => {
-    useCampaignStore.setState((s) => ({
-      posCard: {
-        ...s.posCard,
-        blocks: s.posCard.blocks.map((b) => (b.id === block.id ? next : b)),
-      },
-    }));
-  };
-
+const BlockEditor = ({ block, update }: { block: POSBlock; update: (next: POSBlock) => void }) => {
   switch (block.type) {
     case "eyebrow":
-      return (
-        <input
-          type="text"
-          value={block.text}
-          onChange={(e) => update({ ...block, text: e.target.value })}
-          className="mt-1 w-full rounded border px-2 py-1 text-xs"
-        />
-      );
     case "textLine":
       return (
         <input
@@ -219,16 +203,6 @@ const BlockEditor = ({ block }: { block: POSBlock }) => {
         />
       );
     case "title":
-      return (
-        <textarea
-          value={block.lines.join("\n")}
-          rows={3}
-          onChange={(e) =>
-            update({ ...block, lines: e.target.value.split("\n") })
-          }
-          className="mt-1 w-full rounded border px-2 py-1 text-xs"
-        />
-      );
     case "highlight":
       return (
         <textarea
@@ -336,7 +310,7 @@ const BlockEditor = ({ block }: { block: POSBlock }) => {
                 ...block,
                 items: [
                   ...block.items,
-                  { rank: block.items.length + 1, text: "" },
+                  { rank: Math.max(0, ...block.items.map((i) => i.rank)) + 1, text: "" },
                 ],
               })
             }

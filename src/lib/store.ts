@@ -77,6 +77,7 @@ type Actions = {
   addPosBlock: (block: POSBlock) => void;
   removePosBlock: (id: string) => void;
   movePosBlock: (id: string, direction: "up" | "down") => void;
+  updatePosBlock: (block: POSBlock) => void;
 };
 
 export const useCampaignStore = create<State & Actions>((set, get) => ({
@@ -181,4 +182,12 @@ export const useCampaignStore = create<State & Actions>((set, get) => ({
       [blocks[idx], blocks[target]] = [blocks[target], blocks[idx]];
       return { posCard: { ...s.posCard, blocks } };
     }),
+
+  updatePosBlock: (block) =>
+    set((s) => ({
+      posCard: {
+        ...s.posCard,
+        blocks: s.posCard.blocks.map((b) => (b.id === block.id ? block : b)),
+      },
+    })),
 }));
