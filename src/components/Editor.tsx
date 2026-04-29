@@ -4,9 +4,10 @@ import { sampleParanLabel } from "@/lib/samples";
 import { AutoMode } from "./AutoMode";
 import { DetailMode } from "./DetailMode";
 import { HtmlDetailMode } from "./HtmlDetailMode";
+import { POSMode } from "./POSMode";
 import { Preview } from "./Preview";
 
-type Mode = "auto" | "detail";
+type Mode = "auto" | "detail" | "pos";
 
 export const Editor = () => {
   const [mode, setMode] = useState<Mode>("auto");
@@ -64,10 +65,23 @@ export const Editor = () => {
             </span>
           )}
         </button>
+        <button
+          type="button"
+          onClick={() => setMode("pos")}
+          className={`border-b-2 px-6 py-2.5 text-sm ${
+            mode === "pos"
+              ? "border-theme font-bold text-theme"
+              : "border-transparent text-fg-muted hover:text-fg"
+          }`}
+        >
+          📌 POS/해피TV 화면 만들기
+        </button>
       </div>
       <div className="flex flex-1 overflow-hidden">
         <aside className="flex w-[480px] shrink-0 flex-col overflow-y-auto border-r border-divider bg-white">
-          {mode === "auto" ? (
+          {mode === "pos" ? (
+            <POSMode />
+          ) : mode === "auto" ? (
             <AutoMode onGenerated={() => {}} previewRef={previewRef} />
           ) : htmlOutput ? (
             <HtmlDetailMode previewRef={previewRef} />

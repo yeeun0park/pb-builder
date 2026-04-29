@@ -2,11 +2,12 @@ import { forwardRef, lazy, Suspense, useEffect, useState } from "react";
 import { getLogoDataUrl } from "@/lib/assets";
 import { useCampaignStore } from "@/lib/store";
 import { HtmlPreview } from "./HtmlPreview";
+import { POSPreview } from "./POSPreview";
 
 const PdfPreview = lazy(() => import("./PdfPreview"));
 
 type Props = {
-  mode: "auto" | "detail";
+  mode: "auto" | "detail" | "pos";
 };
 
 export const Preview = forwardRef<HTMLIFrameElement, Props>(({ mode }, ref) => {
@@ -17,6 +18,10 @@ export const Preview = forwardRef<HTMLIFrameElement, Props>(({ mode }, ref) => {
   useEffect(() => {
     getLogoDataUrl().then(setLogoSrc);
   }, []);
+
+  if (mode === "pos") {
+    return <POSPreview ref={ref} />;
+  }
 
   if (htmlOutput) {
     return <HtmlPreview ref={ref} html={htmlOutput} />;
