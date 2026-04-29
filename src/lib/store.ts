@@ -52,6 +52,8 @@ const defaultCampaign = (): Campaign => ({
   sections: [],
 });
 
+const defaultPosCard = (): POSCard => POSCardSchema.parse({});
+
 type State = {
   campaign: Campaign;
   selectedSectionId: string | null;
@@ -81,7 +83,7 @@ export const useCampaignStore = create<State & Actions>((set, get) => ({
   campaign: defaultCampaign(),
   selectedSectionId: null,
   htmlOutput: "",
-  posCard: POSCardSchema.parse({}),
+  posCard: defaultPosCard(),
 
   setHtmlOutput: (html) => set({ htmlOutput: html }),
 
@@ -148,7 +150,7 @@ export const useCampaignStore = create<State & Actions>((set, get) => ({
       campaign: defaultCampaign(),
       selectedSectionId: null,
       htmlOutput: "",
-      posCard: POSCardSchema.parse({}),
+      posCard: defaultPosCard(),
     }),
 
   setPosCard: (card) => set({ posCard: card }),
@@ -171,7 +173,7 @@ export const useCampaignStore = create<State & Actions>((set, get) => ({
 
   movePosBlock: (id, direction) =>
     set((s) => {
-      const blocks = [...s.posCard.blocks];
+      const blocks = [...s.posCard.blocks]; // 복사본 — 아래 swap은 원본 불변
       const idx = blocks.findIndex((b) => b.id === id);
       if (idx === -1) return s;
       const target = direction === "up" ? idx - 1 : idx + 1;
