@@ -1,4 +1,4 @@
-import type { RefObject } from "react";
+import { useState, type RefObject } from "react";
 import { useCampaignStore } from "@/lib/store";
 import { readAsDataUrl } from "@/lib/imageUpload";
 import { samplePosCards } from "@/lib/posSamples";
@@ -17,14 +17,25 @@ export const POSMode = ({ previewRef }: Props) => {
   const moveBlock = useCampaignStore((s) => s.movePosBlock);
   const updateBlock = useCampaignStore((s) => s.updatePosBlock);
 
+  const [exporting, setExporting] = useState(false);
+
   const exportJpg = async () => {
     if (!previewRef.current) return;
-    await captureIframeAsJpeg(previewRef.current, {
-      width: 800,
-      height: 600,
-      filename: `pos-${Date.now()}.jpg`,
-      targetSelector: "#pos-root",
-    });
+    if (exporting) return;
+    setExporting(true);
+    try {
+      await captureIframeAsJpeg(previewRef.current, {
+        width: 800,
+        height: 600,
+        filename: `pos-${Date.now()}.jpg`,
+        targetSelector: "#pos-root",
+      });
+    } catch (err) {
+      console.error("[POSMode] JPG 내보내기 실패:", err);
+      alert("JPG 저장에 실패했습니다. 미리보기가 로드됐는지 확인해주세요.");
+    } finally {
+      setExporting(false);
+    }
   };
 
   const onUploadKV = async (file: File) => {
@@ -58,9 +69,10 @@ export const POSMode = ({ previewRef }: Props) => {
         <button
           type="button"
           onClick={exportJpg}
-          className="w-full rounded bg-theme px-3 py-2 text-sm font-bold text-white hover:opacity-90"
+          disabled={exporting}
+          className="w-full rounded bg-theme px-3 py-2 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          JPG로 저장 (800×600)
+          {exporting ? "저장 중..." : "JPG로 저장 (800×600)"}
         </button>
       </section>
 
