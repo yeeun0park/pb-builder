@@ -1,13 +1,14 @@
 import { forwardRef, lazy, Suspense, useEffect, useState } from "react";
 import { getLogoDataUrl } from "@/lib/assets";
 import { useCampaignStore } from "@/lib/store";
+import type { EditorMode } from "@/lib/types";
 import { HtmlPreview } from "./HtmlPreview";
 import { POSPreview } from "./POSPreview";
 
 const PdfPreview = lazy(() => import("./PdfPreview"));
 
 type Props = {
-  mode: "auto" | "detail" | "pos";
+  mode: EditorMode;
 };
 
 export const Preview = forwardRef<HTMLIFrameElement, Props>(({ mode }, ref) => {

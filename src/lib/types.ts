@@ -20,3 +20,5 @@ export type GridSection = z.infer<typeof GridSectionSchema>;
 export type Section = z.infer<typeof SectionSchema>;
 export type SectionType = z.infer<typeof SectionTypeSchema>;
 export type Campaign = z.infer<typeof CampaignSchema>;
+
+export type EditorMode = "auto" | "detail" | "pos";

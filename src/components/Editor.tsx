@@ -1,16 +1,15 @@
 import { useRef, useState } from "react";
 import { useCampaignStore } from "@/lib/store";
 import { sampleParanLabel } from "@/lib/samples";
+import type { EditorMode } from "@/lib/types";
 import { AutoMode } from "./AutoMode";
 import { DetailMode } from "./DetailMode";
 import { HtmlDetailMode } from "./HtmlDetailMode";
 import { POSMode } from "./POSMode";
 import { Preview } from "./Preview";
 
-type Mode = "auto" | "detail" | "pos";
-
 export const Editor = () => {
-  const [mode, setMode] = useState<Mode>("auto");
+  const [mode, setMode] = useState<EditorMode>("auto");
   const htmlOutput = useCampaignStore((s) => s.htmlOutput);
   const loadJson = useCampaignStore((s) => s.loadJson);
   const reset = useCampaignStore((s) => s.reset);
