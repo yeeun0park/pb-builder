@@ -130,8 +130,8 @@ export const sampleMatchaCake: POSCard = {
       id: "mc-pills",
       type: "pillRow",
       items: [
-        { label: "예약기간", value: "4/10(금) - 한정수량 소진 시" },
-        { label: "픽업기간", value: "4/24(금) - 4/30(목)" },
+        { label: "예약기간", value: "4/10(금) · 한정수량 소진 시" },
+        { label: "픽업기간", value: "4/24(금) · 4/30(목)" },
       ],
     },
     {
