@@ -11,6 +11,7 @@ export const BlockStyleSchema = z.object({
   marginTop: z.number().int().min(0).max(200).optional(),
   marginBottom: z.number().int().min(0).max(200).optional(),
   color: HexColor.optional(),
+  scale: z.number().min(0.3).max(3).optional(),
 });
 
 export type BlockStyle = z.infer<typeof BlockStyleSchema>;
@@ -88,6 +89,10 @@ export const POSBlockSchema = z.discriminatedUnion("type", [
 export const POSCardSchema = z.object({
   layout: z.enum(["split", "fullbleed"]).default("split"),
   keyVisualUrl: z.string().optional(),
+  keyVisualPosition: z.object({
+    x: z.number().min(0).max(100),
+    y: z.number().min(0).max(100),
+  }).default({ x: 50, y: 50 }),
   splitRatio: z.number().min(0.3).max(0.8).default(0.6),
   panelBg: HexColor.default("#E8E5F2"),
   textPrimary: HexColor.default("#1A1A1A"),

@@ -44,9 +44,13 @@ export const POSCanvas = ({ card, logoUrl }: Props) => {
 
   const renderBlock = (b: POSBlock) => {
     const isDragging = drag?.id === b.id;
+    const dragTransform = isDragging ? `translate(0, ${drag.deltaY}px)` : "";
+    const scaleTransform = b.style?.scale && b.style.scale !== 1 ? `scale(${b.style.scale})` : "";
+    const combined = [dragTransform, scaleTransform].filter(Boolean).join(" ");
     const wrapperStyle: React.CSSProperties = {
       cursor: "grab",
-      transform: isDragging ? `translate(0, ${drag.deltaY}px)` : undefined,
+      transform: combined || undefined,
+      transformOrigin: "center top",
       userSelect: "none",
       touchAction: "none",
     };
@@ -97,12 +101,13 @@ export const POSCanvas = ({ card, logoUrl }: Props) => {
   const isFullbleed = card.layout === "fullbleed";
   const leftWidth = `${card.splitRatio * 100}%`;
   const rightWidth = `${(1 - card.splitRatio) * 100}%`;
+  const bgPos = `${card.keyVisualPosition.x}% ${card.keyVisualPosition.y}%`;
 
   return (
     <div style={{
       width: 800, height: 600, position: "relative",
       background: isFullbleed
-        ? (card.keyVisualUrl ? `url(${card.keyVisualUrl}) center/cover` : card.panelBg)
+        ? (card.keyVisualUrl ? `url(${card.keyVisualUrl}) ${bgPos}/cover` : card.panelBg)
         : "#fff",
       fontFamily: "PBGothic, sans-serif",
     }}>
@@ -110,7 +115,7 @@ export const POSCanvas = ({ card, logoUrl }: Props) => {
         {!isFullbleed && (
           <div style={{
             width: leftWidth,
-            background: card.keyVisualUrl ? `url(${card.keyVisualUrl}) center/cover` : "#f5f5f5",
+            background: card.keyVisualUrl ? `url(${card.keyVisualUrl}) ${bgPos}/cover` : "#f5f5f5",
           }} />
         )}
         <div style={{
@@ -122,7 +127,7 @@ export const POSCanvas = ({ card, logoUrl }: Props) => {
             bottom: 0,
           } : {}),
           background: isFullbleed ? `${card.panelBg}${PANEL_ALPHA_HEX}` : card.panelBg,
-          padding: "32px 28px",
+          padding: "32px 28px 48px 28px",
           display: "flex",
           flexDirection: "column",
         }}>

@@ -5,6 +5,7 @@ import type { POSCard } from "./posSchema";
 export const sampleBabMeokGoPaba = {
   layout: "split",
   splitRatio: 0.6,
+  keyVisualPosition: { x: 50, y: 50 },
   panelBg: "#F5EFD8",
   textPrimary: "#1A2D5A",
   textAccent: "#1A2D5A",
@@ -44,11 +45,70 @@ export const sampleBabMeokGoPaba = {
   ],
 } satisfies POSCard;
 
+// 시안: 밥먹고파바고 4차_POS.jpg (split)
+// 배경: 연보라(#C8B8E8), 패널: 흰색(#FFFFFF), 텍스트: 진네이비(#1A2D5A)
+// eyebrow + title + highlight + textLine x3 + qrBlock 구조
+export const sampleBabMeokGoPaba4 = {
+  layout: "split",
+  splitRatio: 0.6,
+  keyVisualPosition: { x: 50, y: 50 },
+  panelBg: "#FFFFFF",
+  textPrimary: "#1A2D5A",
+  textAccent: "#1A2D5A",
+  pillBg: "#1A2D5A",
+  pillText: "#FFFFFF",
+  blocks: [
+    {
+      id: "bmgp4-eyebrow",
+      type: "eyebrow",
+      text: "매주 월요일 오전 10시 오픈!",
+      style: { align: "center", fontSize: 13, lineHeight: 1.4, marginBottom: 8 },
+    },
+    {
+      id: "bmgp4-title",
+      type: "title",
+      lines: ["밥 먹고 파바 고?"],
+      style: { align: "center", fontSize: 24, lineHeight: 1.3, marginBottom: 6 },
+    },
+    {
+      id: "bmgp4-highlight",
+      type: "highlight",
+      lines: ["SET 최대 50% 선착순 혜택!"],
+      style: { align: "center", fontSize: 22, lineHeight: 1.2, marginBottom: 16 },
+    },
+    {
+      id: "bmgp4-text1",
+      type: "textLine",
+      text: "05.04 ~ 05.31",
+      style: { align: "center", fontSize: 18, lineHeight: 1.4, marginBottom: 16 },
+    },
+    {
+      id: "bmgp4-text2",
+      type: "textLine",
+      text: "제조음료 + 인기디저트",
+      style: { align: "center", fontSize: 14, lineHeight: 1.35 },
+    },
+    {
+      id: "bmgp4-text3",
+      type: "textLine",
+      text: "9,300원 이상 구매 시 4,650원 OFF",
+      style: { align: "center", fontSize: 14, lineHeight: 1.35, marginBottom: 24 },
+    },
+    {
+      id: "bmgp4-qr",
+      type: "qrBlock",
+      caption: "파바앱에서\n선착순 쿠폰 받기",
+      style: { align: "center" },
+    },
+  ],
+} satisfies POSCard;
+
 // 시안: 가정의달케이크사전예약_POS.jpg (split)
 // Title: 2줄 중간, Highlight: 2줄 매우 큼 (가장 강조), pillRow 2행
 export const sampleFamilyMonth = {
   layout: "split",
   splitRatio: 0.6,
+  keyVisualPosition: { x: 50, y: 50 },
   panelBg: "#E8E5F2",
   textPrimary: "#1A2D5A",
   textAccent: "#1A2D5A",
@@ -89,6 +149,7 @@ export const sampleFamilyMonth = {
 export const sampleParanRose = {
   layout: "split",
   splitRatio: 0.6,
+  keyVisualPosition: { x: 50, y: 50 },
   panelBg: "#E8E5F2",
   textPrimary: "#1A2D5A",
   textAccent: "#1A2D5A",
@@ -129,6 +190,7 @@ export const sampleParanRose = {
 export const sampleMatchaCake = {
   layout: "split",
   splitRatio: 0.6,
+  keyVisualPosition: { x: 50, y: 50 },
   panelBg: "#3D6B35",
   textPrimary: "#FFFFFF",
   textAccent: "#FFFFFF",
@@ -168,80 +230,10 @@ export const sampleMatchaCake = {
   ],
 } satisfies POSCard;
 
-// 시안: LAFC밋앤그릿_POS.jpg (fullbleed)
-// Title: 2줄 소형(상단 설명), Highlight: 2줄 중형 강조, textLine: 4줄 소형,
-// rankList → pillRow 변환 (rank→label "N등", text→value)
-export const sampleLafc = {
-  layout: "fullbleed",
-  splitRatio: 0.6,
-  panelBg: "#1E2218",
-  textPrimary: "#FFFFFF",
-  textAccent: "#FFC700",
-  pillBg: "#FFC700",
-  pillText: "#1E2218",
-  blocks: [
-    {
-      id: "lafc-title",
-      type: "title",
-      lines: [
-        "LAFC 선수들을 직접 만나고",
-        "손흥민 사인 받을 수 있는 특별한 기회",
-      ],
-      style: { fontSize: 18, lineHeight: 1.35, marginBottom: 12 },
-    },
-    {
-      id: "lafc-highlight",
-      type: "highlight",
-      lines: ["파바앱 LAFC 응모이벤트", "단독 팬미팅 & 직관 여행 가자!"],
-      style: { fontSize: 26, lineHeight: 1.25, marginBottom: 20 },
-    },
-    {
-      id: "lafc-text1",
-      type: "textLine",
-      text: "4.27(월) - 6.19(금)",
-      style: { fontSize: 15, lineHeight: 1.4 },
-    },
-    {
-      id: "lafc-text2",
-      type: "textLine",
-      text: "매장 또는 온라인 결제 시",
-      style: { fontSize: 15, lineHeight: 1.4 },
-    },
-    {
-      id: "lafc-text3",
-      type: "textLine",
-      text: "파바앱 사용하면 자동 응모",
-      style: { fontSize: 15, lineHeight: 1.4 },
-    },
-    {
-      id: "lafc-text4",
-      type: "textLine",
-      text: "당첨자 발표 : 6.25(목)",
-      style: { fontSize: 15, lineHeight: 1.4, marginBottom: 20 },
-    },
-    {
-      id: "lafc-pills",
-      type: "pillRow",
-      items: [
-        { label: "1등", value: "LAFC 성덕 패키지 : 단독 팬미팅 & 직관 여행 (7명/동반 1인)" },
-        { label: "2등", value: "LAFC 손흥민 친필 사인 유니폼 (5명)" },
-        { label: "3등", value: "LA올레 케이크 교환권 (30명)" },
-        { label: "4등", value: "파바앱 1만원 교환권 (50명)" },
-      ],
-      style: { marginBottom: 20 },
-    },
-    {
-      id: "lafc-qr",
-      type: "qrBlock",
-      caption: "파바앱 쓰고\n응모하기!",
-    },
-  ],
-} satisfies POSCard;
-
 export const samplePosCards: Record<string, POSCard> = {
   babMeokGoPaba: sampleBabMeokGoPaba,
+  babMeokGoPaba4: sampleBabMeokGoPaba4,
   familyMonth: sampleFamilyMonth,
   paranRose: sampleParanRose,
   matchaCake: sampleMatchaCake,
-  lafc: sampleLafc,
 };

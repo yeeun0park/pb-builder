@@ -132,7 +132,27 @@ export const POSMode = ({ previewRef }: Props) => {
           onChange={(e) => e.target.files?.[0] && onUploadKV(e.target.files[0])}
         />
         {card.keyVisualUrl && (
-          <img src={card.keyVisualUrl} alt="키비주얼" className="mt-2 max-h-32" />
+          <>
+            <img src={card.keyVisualUrl} alt="키비주얼" className="mt-2 max-h-32" />
+            <div className="mt-2 flex flex-col gap-2 text-xs">
+              <label className="flex flex-col gap-1">
+                좌우 위치 ({card.keyVisualPosition.x}%)
+                <input
+                  type="range" min={0} max={100}
+                  value={card.keyVisualPosition.x}
+                  onChange={(e) => updateField("keyVisualPosition", { ...card.keyVisualPosition, x: Number(e.target.value) })}
+                />
+              </label>
+              <label className="flex flex-col gap-1">
+                상하 위치 ({card.keyVisualPosition.y}%)
+                <input
+                  type="range" min={0} max={100}
+                  value={card.keyVisualPosition.y}
+                  onChange={(e) => updateField("keyVisualPosition", { ...card.keyVisualPosition, y: Number(e.target.value) })}
+                />
+              </label>
+            </div>
+          </>
         )}
       </section>
 
@@ -326,6 +346,16 @@ const StyleEditor = ({ block, update }: { block: POSBlock; update: (next: POSBlo
             onChange={(e) => update(updateStyle(block, "marginBottom", e.target.value === "" ? undefined : Number(e.target.value)))}
             className="rounded border px-1 py-0.5"
             placeholder="자동"
+          />
+        </label>
+        <label className="flex flex-col gap-1">
+          전체 크기 (배율)
+          <input
+            type="number" step={0.05} min={0.3} max={3}
+            value={s.scale ?? ""}
+            onChange={(e) => update(updateStyle(block, "scale", e.target.value === "" ? undefined : Number(e.target.value)))}
+            className="rounded border px-1 py-0.5"
+            placeholder="1"
           />
         </label>
       </div>
