@@ -130,7 +130,7 @@ export const POSCanvas = ({ card, logoUrl }: Props) => {
             bottom: 0,
           } : {}),
           background: isFullbleed ? `${card.panelBg}${PANEL_ALPHA_HEX}` : card.panelBg,
-          padding: "32px 28px 24px 28px",
+          padding: "32px 28px",
           display: "flex",
           flexDirection: "column",
         }}>

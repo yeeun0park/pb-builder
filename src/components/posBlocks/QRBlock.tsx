@@ -15,16 +15,20 @@ export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
   const marginTop: string | number =
     s.marginTop !== undefined ? s.marginTop : "auto";
 
+  // horizontal: 이전 동작 (좌측 정렬, 로고/캡션 옆 column)
+  // vertical: 새 동작 (가운데 정렬, 로고/캡션 row 묶음 아래)
   return (
     <div
       style={{
         display: "flex",
         flexDirection: isVertical ? "column" : "row",
-        alignItems: isVertical ? (justify === "flex-start" ? "flex-start" : justify === "flex-end" ? "flex-end" : "center") : "flex-end",
+        alignItems: isVertical
+          ? (justify === "flex-start" ? "flex-start" : justify === "flex-end" ? "flex-end" : "center")
+          : "flex-end",
         gap: isVertical ? 8 : 12,
         marginTop,
         marginBottom: s.marginBottom,
-        justifyContent: isVertical ? undefined : justify,
+        justifyContent: isVertical ? undefined : (s.align ? justify : "flex-start"),
         transform: s.scale && s.scale !== 1 ? `scale(${s.scale})` : undefined,
         transformOrigin: "center top",
       }}
@@ -36,7 +40,7 @@ export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
         style={{
           display: "flex",
           flexDirection: isVertical ? "row" : "column",
-          alignItems: "center",
+          alignItems: isVertical ? "center" : "flex-start",
           gap: isVertical ? 8 : 4,
         }}
       >

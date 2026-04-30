@@ -15,7 +15,7 @@ export const Title = ({ block, color }: Props) => {
         letterSpacing: "-0.05em",
         lineHeight: s.lineHeight ?? 1.25,
         marginTop: s.marginTop,
-        marginBottom: s.marginBottom ?? 12,
+        marginBottom: s.marginBottom ?? 24,
         textAlign: s.align ?? "center",
       }}
     >

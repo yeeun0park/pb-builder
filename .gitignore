@@ -6,3 +6,7 @@ dist-tsc-node
 *.local
 .DS_Store
 .vite
+
+# Generated/local artifacts
+.omc/
+graphify-out/
