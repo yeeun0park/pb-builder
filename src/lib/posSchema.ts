@@ -4,22 +4,36 @@ import { nanoid } from "nanoid";
 const HexColor = z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/);
 const BlockId = z.string().min(1).default(() => nanoid(8));
 
+export const BlockStyleSchema = z.object({
+  align: z.enum(["left", "center", "right"]).optional(),
+  fontSize: z.number().int().min(8).max(72).optional(),
+  lineHeight: z.number().min(0.8).max(3).optional(),
+  marginTop: z.number().int().min(0).max(200).optional(),
+  marginBottom: z.number().int().min(0).max(200).optional(),
+  color: HexColor.optional(),
+});
+
+export type BlockStyle = z.infer<typeof BlockStyleSchema>;
+
 export const EyebrowBlockSchema = z.object({
   id: BlockId,
   type: z.literal("eyebrow"),
   text: z.string().default(""),
+  style: BlockStyleSchema.optional(),
 });
 
 export const TitleBlockSchema = z.object({
   id: BlockId,
   type: z.literal("title"),
   lines: z.array(z.string()).default([""]),
+  style: BlockStyleSchema.optional(),
 });
 
 export const HighlightBlockSchema = z.object({
   id: BlockId,
   type: z.literal("highlight"),
   lines: z.array(z.string()).default([""]),
+  style: BlockStyleSchema.optional(),
 });
 
 export const PillItemSchema = z.object({
@@ -31,12 +45,14 @@ export const PillRowBlockSchema = z.object({
   id: BlockId,
   type: z.literal("pillRow"),
   items: z.array(PillItemSchema).default([]),
+  style: BlockStyleSchema.optional(),
 });
 
 export const TextLineBlockSchema = z.object({
   id: BlockId,
   type: z.literal("textLine"),
   text: z.string().default(""),
+  style: BlockStyleSchema.optional(),
 });
 
 export const RankItemSchema = z.object({
@@ -48,6 +64,7 @@ export const RankListBlockSchema = z.object({
   id: BlockId,
   type: z.literal("rankList"),
   items: z.array(RankItemSchema).default([]),
+  style: BlockStyleSchema.optional(),
 });
 
 export const QRBlockSchema = z.object({
@@ -55,6 +72,7 @@ export const QRBlockSchema = z.object({
   type: z.literal("qrBlock"),
   qrDataUrl: z.string().optional(),
   caption: z.string().default(""),
+  style: BlockStyleSchema.optional(),
 });
 
 export const POSBlockSchema = z.discriminatedUnion("type", [

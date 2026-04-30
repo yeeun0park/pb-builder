@@ -13,11 +13,13 @@ export const sampleBabMeokGoPaba = {
       id: "bmgp-title",
       type: "title",
       lines: ["밥 먹고 파바 고?"],
+      style: { align: "center", fontSize: 22 },
     },
     {
       id: "bmgp-highlight",
       type: "highlight",
       lines: ["SET 최대 50% 혜택!"],
+      style: { align: "center", fontSize: 24, marginBottom: 36 },
     },
     {
       id: "bmgp-text1",
@@ -28,11 +30,13 @@ export const sampleBabMeokGoPaba = {
       id: "bmgp-text2",
       type: "textLine",
       text: "2차 쿠폰 발급 : 4/11 ~ 4/15",
+      style: { marginBottom: 32 },
     },
     {
       id: "bmgp-qr",
       type: "qrBlock",
       caption: "파바앱으로\n쿠폰 받으러 가기!",
+      style: { align: "center" },
     },
   ],
 } satisfies POSCard;
