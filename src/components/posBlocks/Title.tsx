@@ -16,7 +16,7 @@ export const Title = ({ block, color }: Props) => {
         lineHeight: s.lineHeight ?? 1.25,
         marginTop: s.marginTop,
         marginBottom: s.marginBottom ?? 12,
-        textAlign: s.align ?? "left",
+        textAlign: s.align ?? "center",
       }}
     >
       {visibleLines.map((l, i) => (

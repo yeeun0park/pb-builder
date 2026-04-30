@@ -16,7 +16,7 @@ export const Highlight = ({ block, color }: Props) => {
         lineHeight: s.lineHeight ?? 1.25,
         marginTop: s.marginTop,
         marginBottom: s.marginBottom ?? 16,
-        textAlign: s.align ?? "left",
+        textAlign: s.align ?? "center",
       }}
     >
       {visibleLines.map((l, i) => (

@@ -15,7 +15,7 @@ export const Eyebrow = ({ block, color }: Props) => {
         lineHeight: s.lineHeight,
         marginTop: s.marginTop,
         marginBottom: s.marginBottom ?? 8,
-        textAlign: s.align ?? "left",
+        textAlign: s.align ?? "center",
       }}
     >
       {block.text}

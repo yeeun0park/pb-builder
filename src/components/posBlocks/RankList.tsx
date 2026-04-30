@@ -6,11 +6,11 @@ export const RankList = ({ block, pillBg, pillText, textColor }: Props) => {
   if (block.items.length === 0) return null;
   const s = block.style ?? {};
   const rowJustify =
-    s.align === "center"
-      ? "center"
+    s.align === "left"
+      ? "flex-start"
       : s.align === "right"
       ? "flex-end"
-      : "flex-start";
+      : "center";
   return (
     <div
       style={{

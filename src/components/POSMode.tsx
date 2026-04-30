@@ -2,7 +2,7 @@ import { useState, type RefObject } from "react";
 import { useCampaignStore } from "@/lib/store";
 import { readAsDataUrl } from "@/lib/imageUpload";
 import { samplePosCards } from "@/lib/posSamples";
-import type { POSBlock } from "@/lib/posSchema";
+import type { POSBlock, BlockStyle } from "@/lib/posSchema";
 import { captureIframeAsJpeg } from "@/lib/htmlExport";
 import { nanoid } from "nanoid";
 
@@ -226,29 +226,124 @@ export const POSMode = ({ previewRef }: Props) => {
   );
 };
 
+const updateStyle = (block: POSBlock, key: keyof BlockStyle, value: BlockStyle[keyof BlockStyle]) => {
+  const nextStyle = { ...(block.style ?? {}) };
+  if (value === "" || value === undefined) {
+    delete nextStyle[key];
+  } else {
+    (nextStyle as any)[key] = value;
+  }
+  const next = { ...block, style: Object.keys(nextStyle).length > 0 ? nextStyle : undefined } as POSBlock;
+  return next;
+};
+
+const StyleEditor = ({ block, update }: { block: POSBlock; update: (next: POSBlock) => void }) => {
+  const s = block.style ?? {};
+  return (
+    <details className="mt-2 border-t pt-2">
+      <summary className="cursor-pointer text-xs font-bold text-gray-600">스타일 조정</summary>
+      <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
+        <label className="flex flex-col gap-1">
+          정렬
+          <select
+            value={s.align ?? ""}
+            onChange={(e) => update(updateStyle(block, "align", (e.target.value || undefined) as any))}
+            className="rounded border px-1 py-0.5"
+          >
+            <option value="">기본 (가운데)</option>
+            <option value="left">좌측</option>
+            <option value="center">가운데</option>
+            <option value="right">우측</option>
+          </select>
+        </label>
+        <label className="flex flex-col gap-1">
+          글자 크기 (px)
+          <input
+            type="number" min={8} max={72}
+            value={s.fontSize ?? ""}
+            onChange={(e) => update(updateStyle(block, "fontSize", e.target.value === "" ? undefined : Number(e.target.value)))}
+            className="rounded border px-1 py-0.5"
+            placeholder="자동"
+          />
+        </label>
+        <label className="flex flex-col gap-1">
+          행간 (예: 1.3)
+          <input
+            type="number" step={0.05} min={0.8} max={3}
+            value={s.lineHeight ?? ""}
+            onChange={(e) => update(updateStyle(block, "lineHeight", e.target.value === "" ? undefined : Number(e.target.value)))}
+            className="rounded border px-1 py-0.5"
+            placeholder="자동"
+          />
+        </label>
+        <label className="flex flex-col gap-1">
+          색상
+          <div className="flex gap-1">
+            <input
+              type="color"
+              value={s.color ?? "#000000"}
+              onChange={(e) => update(updateStyle(block, "color", e.target.value))}
+              className="h-7 w-10"
+            />
+            {s.color && (
+              <button type="button" onClick={() => update(updateStyle(block, "color", undefined))} className="text-[10px] text-gray-500 hover:text-red-500">초기화</button>
+            )}
+          </div>
+        </label>
+        <label className="flex flex-col gap-1">
+          위 여백 (px)
+          <input
+            type="number" min={0} max={200}
+            value={s.marginTop ?? ""}
+            onChange={(e) => update(updateStyle(block, "marginTop", e.target.value === "" ? undefined : Number(e.target.value)))}
+            className="rounded border px-1 py-0.5"
+            placeholder="자동"
+          />
+        </label>
+        <label className="flex flex-col gap-1">
+          아래 여백 (px)
+          <input
+            type="number" min={0} max={200}
+            value={s.marginBottom ?? ""}
+            onChange={(e) => update(updateStyle(block, "marginBottom", e.target.value === "" ? undefined : Number(e.target.value)))}
+            className="rounded border px-1 py-0.5"
+            placeholder="자동"
+          />
+        </label>
+      </div>
+    </details>
+  );
+};
+
 const BlockEditor = ({ block, update }: { block: POSBlock; update: (next: POSBlock) => void }) => {
   switch (block.type) {
     case "eyebrow":
     case "textLine":
       return (
-        <input
-          type="text"
-          value={block.text}
-          onChange={(e) => update({ ...block, text: e.target.value })}
-          className="mt-1 w-full rounded border px-2 py-1 text-xs"
-        />
+        <>
+          <input
+            type="text"
+            value={block.text}
+            onChange={(e) => update({ ...block, text: e.target.value })}
+            className="mt-1 w-full rounded border px-2 py-1 text-xs"
+          />
+          <StyleEditor block={block} update={update} />
+        </>
       );
     case "title":
     case "highlight":
       return (
-        <textarea
-          value={block.lines.join("\n")}
-          rows={3}
-          onChange={(e) =>
-            update({ ...block, lines: e.target.value.split("\n") })
-          }
-          className="mt-1 w-full rounded border px-2 py-1 text-xs"
-        />
+        <>
+          <textarea
+            value={block.lines.join("\n")}
+            rows={3}
+            onChange={(e) =>
+              update({ ...block, lines: e.target.value.split("\n") })
+            }
+            className="mt-1 w-full rounded border px-2 py-1 text-xs"
+          />
+          <StyleEditor block={block} update={update} />
+        </>
       );
     case "pillRow":
       return (
@@ -300,6 +395,7 @@ const BlockEditor = ({ block, update }: { block: POSBlock; update: (next: POSBlo
           >
             + 항목
           </button>
+          <StyleEditor block={block} update={update} />
         </div>
       );
     case "rankList":
@@ -354,6 +450,7 @@ const BlockEditor = ({ block, update }: { block: POSBlock; update: (next: POSBlo
           >
             + 등수
           </button>
+          <StyleEditor block={block} update={update} />
         </div>
       );
     case "qrBlock":
@@ -376,6 +473,7 @@ const BlockEditor = ({ block, update }: { block: POSBlock; update: (next: POSBlo
             onChange={(e) => update({ ...block, caption: e.target.value })}
             className="rounded border px-1 text-xs"
           />
+          <StyleEditor block={block} update={update} />
         </div>
       );
     default:

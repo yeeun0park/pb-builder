@@ -5,11 +5,11 @@ type Props = { block: QRBlockType; logoUrl: string; textColor: string };
 export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
   const s = block.style ?? {};
   const outerJustify =
-    s.align === "center"
-      ? "center"
+    s.align === "left"
+      ? "flex-start"
       : s.align === "right"
       ? "flex-end"
-      : "flex-start";
+      : "center";
   // marginTop: style override가 있으면 px값, 없으면 "auto"로 밀어냄
   const marginTop: string | number =
     s.marginTop !== undefined ? s.marginTop : "auto";

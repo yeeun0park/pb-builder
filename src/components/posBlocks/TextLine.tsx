@@ -14,7 +14,7 @@ export const TextLine = ({ block, color }: Props) => {
         lineHeight: s.lineHeight ?? 1.5,
         marginTop: s.marginTop,
         marginBottom: s.marginBottom ?? 6,
-        textAlign: s.align ?? "left",
+        textAlign: s.align ?? "center",
       }}
     >
       {block.text}
