@@ -23,9 +23,10 @@ export const POSPreview = forwardRef<HTMLIFrameElement>((_, ref) => {
     if (!doc) return;
 
     const mount = async () => {
+      // 1. style은 한 번만 주입
       if (!doc.getElementById("pos-style")) {
         const fontCss = await getEmbeddedFontCss();
-        if (cancelled) return;  // race 가드: cleanup 후 도착한 응답 무시
+        if (cancelled) return;
         doc.head.innerHTML = `
           <style id="pos-style">
             ${fontCss}
@@ -35,21 +36,35 @@ export const POSPreview = forwardRef<HTMLIFrameElement>((_, ref) => {
           </style>
         `;
         doc.body.innerHTML = `<div id="pos-root"></div>`;
-        const mountNode = doc.getElementById("pos-root")!;
+      }
+      if (cancelled) return;
+
+      // 2. ReactDOM.Root 가드는 #pos-style과 분리 — rootRef가 없을 때만 생성
+      if (!rootRef.current) {
+        const mountNode = doc.getElementById("pos-root");
+        if (!mountNode) return;
         rootRef.current = ReactDOM.createRoot(mountNode);
       }
 
-      rootRef.current?.render(<POSCanvas card={card} logoUrl={logoUrl} />);
+      // 3. render는 매번 (card/logoUrl 변경 반영)
+      rootRef.current.render(<POSCanvas card={card} logoUrl={logoUrl} />);
     };
 
     mount();
 
+    // card/logoUrl 변경 시 cleanup은 cancelled만 처리 — unmount 안 함
     return () => {
       cancelled = true;
+    };
+  }, [card, logoUrl]);
+
+  // 컴포넌트 진짜 unmount 시에만 root 정리
+  useEffect(() => {
+    return () => {
       rootRef.current?.unmount();
       rootRef.current = null;
     };
-  }, [card, logoUrl]);
+  }, []);
 
   return (
     <iframe
