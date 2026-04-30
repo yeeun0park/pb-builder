@@ -30,6 +30,8 @@ export const POSCanvas = ({ card, logoUrl }: Props) => {
   };
 
   const isFullbleed = card.layout === "fullbleed";
+  const leftWidth = `${card.splitRatio * 100}%`;
+  const rightWidth = `${(1 - card.splitRatio) * 100}%`;
 
   return (
     <div style={{
@@ -42,12 +44,12 @@ export const POSCanvas = ({ card, logoUrl }: Props) => {
       <div style={{ display: "flex", width: "100%", height: "100%", position: "relative" }}>
         {!isFullbleed && (
           <div style={{
-            width: "60%",
+            width: leftWidth,
             background: card.keyVisualUrl ? `url(${card.keyVisualUrl}) center/cover` : "#f5f5f5",
           }} />
         )}
         <div style={{
-          width: "40%",
+          width: rightWidth,
           ...(isFullbleed ? {
             position: "absolute" as const,
             right: 0,

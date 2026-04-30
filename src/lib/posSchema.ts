@@ -88,6 +88,7 @@ export const POSBlockSchema = z.discriminatedUnion("type", [
 export const POSCardSchema = z.object({
   layout: z.enum(["split", "fullbleed"]).default("split"),
   keyVisualUrl: z.string().optional(),
+  splitRatio: z.number().min(0.3).max(0.8).default(0.6),
   panelBg: HexColor.default("#E8E5F2"),
   textPrimary: HexColor.default("#1A1A1A"),
   textAccent: HexColor.default("#3A4FB8"),

@@ -107,6 +107,24 @@ export const POSMode = ({ previewRef }: Props) => {
       </section>
 
       <section>
+        <h3 className="mb-2 text-sm font-bold">좌측 이미지 비율 ({Math.round(card.splitRatio * 100)}%)</h3>
+        <input
+          type="range"
+          min={30}
+          max={80}
+          step={1}
+          value={Math.round(card.splitRatio * 100)}
+          onChange={(e) => updateField("splitRatio", Number(e.target.value) / 100)}
+          className="w-full"
+        />
+        <div className="flex justify-between text-[10px] text-gray-500">
+          <span>30%</span>
+          <span>50%</span>
+          <span>80%</span>
+        </div>
+      </section>
+
+      <section>
         <h3 className="mb-2 text-sm font-bold">키비주얼 이미지</h3>
         <input
           type="file"

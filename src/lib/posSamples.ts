@@ -4,6 +4,7 @@ import type { POSCard } from "./posSchema";
 // Title: 중간 크기 1줄, Highlight: Title보다 약간 크고 굵음, textLine: 작고 2줄 간격 좁음
 export const sampleBabMeokGoPaba = {
   layout: "split",
+  splitRatio: 0.6,
   panelBg: "#F5EFD8",
   textPrimary: "#1A2D5A",
   textAccent: "#1A2D5A",
@@ -47,6 +48,7 @@ export const sampleBabMeokGoPaba = {
 // Title: 2줄 중간, Highlight: 2줄 매우 큼 (가장 강조), pillRow 2행
 export const sampleFamilyMonth = {
   layout: "split",
+  splitRatio: 0.6,
   panelBg: "#E8E5F2",
   textPrimary: "#1A2D5A",
   textAccent: "#1A2D5A",
@@ -86,6 +88,7 @@ export const sampleFamilyMonth = {
 // Eyebrow: 소형 1줄, Highlight: 2줄 최대 강조 (가장 큼), pillRow 2행
 export const sampleParanRose = {
   layout: "split",
+  splitRatio: 0.6,
   panelBg: "#E8E5F2",
   textPrimary: "#1A2D5A",
   textAccent: "#1A2D5A",
@@ -125,6 +128,7 @@ export const sampleParanRose = {
 // Eyebrow: 소형 강조색, Highlight: 3줄 (길이 길어 fontSize 작게), pillRow 2행
 export const sampleMatchaCake = {
   layout: "split",
+  splitRatio: 0.6,
   panelBg: "#3D6B35",
   textPrimary: "#FFFFFF",
   textAccent: "#FFFFFF",
@@ -169,6 +173,7 @@ export const sampleMatchaCake = {
 // rankList → pillRow 변환 (rank→label "N등", text→value)
 export const sampleLafc = {
   layout: "fullbleed",
+  splitRatio: 0.6,
   panelBg: "#1E2218",
   textPrimary: "#FFFFFF",
   textAccent: "#FFC700",
