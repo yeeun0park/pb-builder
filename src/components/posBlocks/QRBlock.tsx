@@ -29,7 +29,7 @@ export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
       ) : null}
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         {logoUrl ? (
-          <img src={logoUrl} alt="PB 로고" style={{ width: 40, height: 40 }} />
+          <img src={logoUrl} alt="파바앱 로고" style={{ width: 40, height: 40 }} />
         ) : null}
         <div
           style={{

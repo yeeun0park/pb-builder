@@ -18,3 +18,16 @@ export const getLogoDataUrl = (): Promise<string> => {
     .then(toBase64);
   return cached;
 };
+
+let cachedPapaapp: Promise<string> | null = null;
+
+export const getPapaappLogoDataUrl = (): Promise<string> => {
+  if (cachedPapaapp) return cachedPapaapp;
+  cachedPapaapp = fetch(`${import.meta.env.BASE_URL}logo/papaapp-logo.png`)
+    .then((r) => {
+      if (!r.ok) throw new Error(`papaapp logo fetch failed: ${r.status}`);
+      return r.blob();
+    })
+    .then(toBase64);
+  return cachedPapaapp;
+};

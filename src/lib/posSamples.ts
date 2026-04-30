@@ -25,13 +25,12 @@ export const sampleBabMeokGoPaba = {
       id: "bmgp-text1",
       type: "textLine",
       text: "1차 쿠폰 발급 : 4/6 ~ 4/10",
-      style: { align: "left" },
     },
     {
       id: "bmgp-text2",
       type: "textLine",
       text: "2차 쿠폰 발급 : 4/11 ~ 4/15",
-      style: { align: "left", marginBottom: 32 },
+      style: { marginBottom: 32 },
     },
     {
       id: "bmgp-qr",

@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { useCampaignStore } from "@/lib/store";
-import { getLogoDataUrl } from "@/lib/assets";
+import { getPapaappLogoDataUrl } from "@/lib/assets";
 import { getEmbeddedFontCss } from "@/lib/fontBase64";
 import { POSCanvas } from "./POSCanvas";
 
@@ -12,7 +12,7 @@ export const POSPreview = forwardRef<HTMLIFrameElement>((_, ref) => {
   const rootRef = useRef<ReactDOM.Root | null>(null);
 
   useEffect(() => {
-    getLogoDataUrl().then(setLogoUrl);
+    getPapaappLogoDataUrl().then(setLogoUrl);
   }, []);
 
   useEffect(() => {
