@@ -22,9 +22,12 @@ export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
       style={{
         display: "flex",
         flexDirection: isVertical ? "column" : "row",
-        alignItems: isVertical
-          ? (justify === "flex-start" ? "flex-start" : justify === "flex-end" ? "flex-end" : "center")
-          : "flex-end",
+        // vertical: alignItems stretch로 자식 width 같게 (QR과 로고/캡션 묶음 폭 일치)
+        alignItems: isVertical ? "stretch" : "flex-end",
+        // vertical 외곽은 fit-content (QR width 130에 맞춤)
+        width: isVertical ? "fit-content" : undefined,
+        // 부모(패널) 안에서 가로 정렬은 alignSelf로
+        alignSelf: isVertical ? justify : undefined,
         gap: isVertical ? 8 : 12,
         marginTop,
         marginBottom: s.marginBottom,
@@ -40,7 +43,9 @@ export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
         style={{
           display: "flex",
           flexDirection: isVertical ? "row" : "column",
-          alignItems: isVertical ? "center" : "flex-start",
+          alignItems: "center",
+          // vertical: 부모 width 130 안에서 로고/캡션 묶음을 가운데 정렬
+          justifyContent: isVertical ? "center" : undefined,
           gap: isVertical ? 8 : 4,
         }}
       >
@@ -54,7 +59,7 @@ export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
             fontWeight: 700,
             lineHeight: s.lineHeight ?? 1.4,
             whiteSpace: "pre-line",
-            textAlign: "left",
+            textAlign: isVertical ? "center" : "left",
           }}
         >
           {block.caption}
