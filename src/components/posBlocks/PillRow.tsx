@@ -24,6 +24,8 @@ export const PillRow = ({ block, pillBg, pillText, textColor }: Props) => {
         gap: 8,
         marginTop: s.marginTop,
         marginBottom: s.marginBottom ?? 14,
+        alignSelf: "center",
+        width: "fit-content",
       }}
     >
       {block.items.map((item, i) => (
