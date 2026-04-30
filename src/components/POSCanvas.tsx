@@ -1,32 +1,97 @@
+import { useState } from "react";
 import type { POSCard, POSBlock } from "@/lib/posSchema";
+import { useCampaignStore } from "@/lib/store";
 import { Eyebrow, Title, Highlight, PillRow, TextLine, RankList, QRBlock } from "./posBlocks";
 
 const PANEL_ALPHA_HEX = "E0"; // fullbleed 패널 88% 불투명
 
 type Props = { card: POSCard; logoUrl: string };
 
+type DragState = { id: string; startY: number; deltaY: number } | null;
+
 export const POSCanvas = ({ card, logoUrl }: Props) => {
+  const updatePosBlock = useCampaignStore((s) => s.updatePosBlock);
+  const [drag, setDrag] = useState<DragState>(null);
+
+  const onPointerDown = (e: React.PointerEvent, blockId: string) => {
+    if (e.target instanceof HTMLElement) {
+      const tag = e.target.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "BUTTON" || tag === "SELECT") return;
+    }
+    e.preventDefault();
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    setDrag({ id: blockId, startY: e.clientY, deltaY: 0 });
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!drag) return;
+    setDrag((prev) => prev ? { ...prev, deltaY: e.clientY - prev.startY } : null);
+  };
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (!drag) return;
+    (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    const block = card.blocks.find((b) => b.id === drag.id);
+    if (block && Math.abs(drag.deltaY) > 2) {
+      const currentMt = block.style?.marginTop ?? 0;
+      const newMt = currentMt + Math.round(drag.deltaY);
+      const nextStyle = { ...(block.style ?? {}), marginTop: newMt };
+      const nextBlock = { ...block, style: nextStyle } as POSBlock;
+      updatePosBlock(nextBlock);
+    }
+    setDrag(null);
+  };
+
   const renderBlock = (b: POSBlock) => {
+    const isDragging = drag?.id === b.id;
+    const wrapperStyle: React.CSSProperties = {
+      cursor: "grab",
+      transform: isDragging ? `translate(0, ${drag.deltaY}px)` : undefined,
+      userSelect: "none",
+      touchAction: "none",
+    };
+
+    let inner: React.ReactNode = null;
     switch (b.type) {
       case "eyebrow":
-        return <Eyebrow key={b.id} block={b} color={card.textPrimary} />;
+        inner = <Eyebrow block={b} color={card.textPrimary} />;
+        break;
       case "title":
-        return <Title key={b.id} block={b} color={card.textPrimary} />;
+        inner = <Title block={b} color={card.textPrimary} />;
+        break;
       case "highlight":
-        return <Highlight key={b.id} block={b} color={card.textAccent} />;
+        inner = <Highlight block={b} color={card.textAccent} />;
+        break;
       case "pillRow":
-        return <PillRow key={b.id} block={b} pillBg={card.pillBg} pillText={card.pillText} textColor={card.textPrimary} />;
+        inner = <PillRow block={b} pillBg={card.pillBg} pillText={card.pillText} textColor={card.textPrimary} />;
+        break;
       case "textLine":
-        return <TextLine key={b.id} block={b} color={card.textPrimary} />;
+        inner = <TextLine block={b} color={card.textPrimary} />;
+        break;
       case "rankList":
-        return <RankList key={b.id} block={b} pillBg={card.pillBg} pillText={card.pillText} textColor={card.textPrimary} />;
+        inner = <RankList block={b} pillBg={card.pillBg} pillText={card.pillText} textColor={card.textPrimary} />;
+        break;
       case "qrBlock":
-        return <QRBlock key={b.id} block={b} logoUrl={logoUrl} textColor={card.textPrimary} />;
+        inner = <QRBlock block={b} logoUrl={logoUrl} textColor={card.textPrimary} />;
+        break;
       default: {
         const _exhaustive: never = b;
         return _exhaustive;
       }
     }
+
+    return (
+      <div
+        key={b.id}
+        style={wrapperStyle}
+        onPointerDown={(e) => onPointerDown(e, b.id)}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+      >
+        {inner}
+      </div>
+    );
   };
 
   const isFullbleed = card.layout === "fullbleed";
