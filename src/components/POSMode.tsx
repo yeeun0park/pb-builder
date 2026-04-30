@@ -61,7 +61,7 @@ export const POSMode = ({ previewRef }: Props) => {
       case "rankList":
         return { id, type, items: [] };
       case "qrBlock":
-        return { id, type, caption: "" };
+        return { id, type, caption: "", layout: "horizontal" as const };
     }
   };
 
@@ -508,6 +508,16 @@ const BlockEditor = ({ block, update }: { block: POSBlock; update: (next: POSBlo
     case "qrBlock":
       return (
         <div className="mt-1 flex flex-col gap-1">
+          <select
+            value={block.layout}
+            onChange={(e) =>
+              update({ ...block, layout: e.target.value as "horizontal" | "vertical" })
+            }
+            className="rounded border px-2 py-1 text-xs"
+          >
+            <option value="horizontal">가로 (QR 좌 + 로고/캡션 우)</option>
+            <option value="vertical">세로 (QR 위 + 로고/캡션 아래)</option>
+          </select>
           <input
             type="file"
             accept="image/*"

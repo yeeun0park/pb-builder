@@ -80,6 +80,7 @@ export const QRBlockSchema = z.object({
   type: z.literal("qrBlock"),
   qrDataUrl: z.string().optional(),
   caption: z.string().default(""),
+  layout: z.enum(["horizontal", "vertical"]).default("horizontal"),
   style: BlockStyleSchema.optional(),
 });
 

@@ -4,7 +4,8 @@ type Props = { block: QRBlockType; logoUrl: string; textColor: string };
 
 export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
   const s = block.style ?? {};
-  const outerJustify =
+  const isVertical = block.layout === "vertical";
+  const justify =
     s.align === "left"
       ? "flex-start"
       : s.align === "right"
@@ -13,21 +14,32 @@ export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
   // marginTop: style override가 있으면 px값, 없으면 "auto"로 밀어냄
   const marginTop: string | number =
     s.marginTop !== undefined ? s.marginTop : "auto";
+
   return (
     <div
       style={{
         display: "flex",
-        alignItems: "flex-end",
-        gap: 12,
+        flexDirection: isVertical ? "column" : "row",
+        alignItems: isVertical ? (justify === "flex-start" ? "flex-start" : justify === "flex-end" ? "flex-end" : "center") : "flex-end",
+        gap: isVertical ? 8 : 12,
         marginTop,
         marginBottom: s.marginBottom,
-        justifyContent: outerJustify,
+        justifyContent: isVertical ? undefined : justify,
+        transform: s.scale && s.scale !== 1 ? `scale(${s.scale})` : undefined,
+        transformOrigin: "center top",
       }}
     >
       {block.qrDataUrl ? (
         <img src={block.qrDataUrl} alt="QR 코드" style={{ width: 130, height: 130 }} />
       ) : null}
-      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: isVertical ? "row" : "column",
+          alignItems: "center",
+          gap: isVertical ? 8 : 4,
+        }}
+      >
         {logoUrl ? (
           <img src={logoUrl} alt="파바앱 로고" style={{ width: 40, height: 40 }} />
         ) : null}
@@ -36,8 +48,9 @@ export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
             color: s.color ?? textColor,
             fontSize: s.fontSize ?? 13,
             fontWeight: 700,
-            lineHeight: 1.4,
+            lineHeight: s.lineHeight ?? 1.4,
             whiteSpace: "pre-line",
+            textAlign: "left",
           }}
         >
           {block.caption}

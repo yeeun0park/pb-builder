@@ -40,6 +40,7 @@ export const sampleBabMeokGoPaba = {
       id: "bmgp-qr",
       type: "qrBlock",
       caption: "파바앱으로\n쿠폰 받으러 가기!",
+      layout: "horizontal",
       style: { align: "center" },
     },
   ],
@@ -90,6 +91,7 @@ export const sampleBabMeokGoPaba4 = {
       id: "bmgp4-qr",
       type: "qrBlock",
       caption: "파바앱에서\n선착순 쿠폰 받기",
+      layout: "vertical",
       style: { align: "center", scale: 1.6 },
     },
   ],
@@ -132,6 +134,7 @@ export const sampleFamilyMonth = {
       id: "fm-qr",
       type: "qrBlock",
       caption: "파바앱에서 다양한\n가정의 달 케이크 만나보기!",
+      layout: "horizontal",
     },
   ],
 } satisfies POSCard;
@@ -173,6 +176,7 @@ export const sampleParanRose = {
       id: "pr-qr",
       type: "qrBlock",
       caption: "파바앱에서 한정수량\n사전예약 하기",
+      layout: "horizontal",
     },
   ],
 } satisfies POSCard;
@@ -218,6 +222,7 @@ export const sampleMatchaCake = {
       id: "mc-qr",
       type: "qrBlock",
       caption: "파바앱 혜택받고\n사전예약 하러 가기!",
+      layout: "horizontal",
     },
   ],
 } satisfies POSCard;
