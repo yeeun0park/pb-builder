@@ -92,7 +92,7 @@ export const sampleBabMeokGoPaba4 = {
       type: "qrBlock",
       caption: "파바앱에서\n선착순 쿠폰 받기",
       layout: "vertical",
-      style: { align: "center", scale: 1.6 },
+      style: { align: "center", scale: 1.25 },
     },
   ],
 } satisfies POSCard;
