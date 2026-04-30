@@ -43,7 +43,8 @@ export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
         style={{
           display: "flex",
           flexDirection: isVertical ? "row" : "column",
-          alignItems: "center",
+          // horizontal(column): 좌측 정렬로 복원 (이전 동작), vertical(row): 세로 가운데
+          alignItems: isVertical ? "center" : "flex-start",
           // vertical: 부모 width 130 안에서 로고/캡션 묶음을 가운데 정렬
           justifyContent: isVertical ? "center" : undefined,
           gap: isVertical ? 8 : 4,
@@ -59,7 +60,7 @@ export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
             fontWeight: 700,
             lineHeight: s.lineHeight ?? 1.4,
             whiteSpace: "pre-line",
-            textAlign: isVertical ? "center" : "left",
+            textAlign: "left",
           }}
         >
           {block.caption}
