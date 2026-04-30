@@ -56,6 +56,13 @@ export const TextLineBlockSchema = z.object({
   style: BlockStyleSchema.optional(),
 });
 
+export const TextGroupBlockSchema = z.object({
+  id: BlockId,
+  type: z.literal("textGroup"),
+  lines: z.array(z.string()).default([""]),
+  style: BlockStyleSchema.optional(),
+});
+
 export const RankItemSchema = z.object({
   rank: z.number().int().min(1),
   text: z.string(),
@@ -82,6 +89,7 @@ export const POSBlockSchema = z.discriminatedUnion("type", [
   HighlightBlockSchema,
   PillRowBlockSchema,
   TextLineBlockSchema,
+  TextGroupBlockSchema,
   RankListBlockSchema,
   QRBlockSchema,
 ]);
@@ -108,6 +116,7 @@ export type HighlightBlock = z.infer<typeof HighlightBlockSchema>;
 export type PillItem = z.infer<typeof PillItemSchema>;
 export type PillRowBlock = z.infer<typeof PillRowBlockSchema>;
 export type TextLineBlock = z.infer<typeof TextLineBlockSchema>;
+export type TextGroupBlock = z.infer<typeof TextGroupBlockSchema>;
 export type RankItem = z.infer<typeof RankItemSchema>;
 export type RankListBlock = z.infer<typeof RankListBlockSchema>;
 export type QRBlock = z.infer<typeof QRBlockSchema>;

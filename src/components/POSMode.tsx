@@ -56,6 +56,8 @@ export const POSMode = ({ previewRef }: Props) => {
         return { id, type, items: [] };
       case "textLine":
         return { id, type, text: "" };
+      case "textGroup":
+        return { id, type, lines: [""] };
       case "rankList":
         return { id, type, items: [] };
       case "qrBlock":
@@ -204,6 +206,7 @@ export const POSMode = ({ previewRef }: Props) => {
               "highlight",
               "pillRow",
               "textLine",
+              "textGroup",
               "rankList",
               "qrBlock",
             ] as const
@@ -380,6 +383,7 @@ const BlockEditor = ({ block, update }: { block: POSBlock; update: (next: POSBlo
       );
     case "title":
     case "highlight":
+    case "textGroup":
       return (
         <>
           <textarea

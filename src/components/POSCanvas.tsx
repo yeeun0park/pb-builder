@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { POSCard, POSBlock } from "@/lib/posSchema";
 import { useCampaignStore } from "@/lib/store";
-import { Eyebrow, Title, Highlight, PillRow, TextLine, RankList, QRBlock } from "./posBlocks";
+import { Eyebrow, Title, Highlight, PillRow, TextLine, TextGroup, RankList, QRBlock } from "./posBlocks";
 
 const PANEL_ALPHA_HEX = "E0"; // fullbleed 패널 88% 불투명
 
@@ -72,6 +72,9 @@ export const POSCanvas = ({ card, logoUrl }: Props) => {
       case "textLine":
         inner = <TextLine block={b} color={card.textPrimary} />;
         break;
+      case "textGroup":
+        inner = <TextGroup block={b} color={card.textPrimary} />;
+        break;
       case "rankList":
         inner = <RankList block={b} pillBg={card.pillBg} pillText={card.pillText} textColor={card.textPrimary} />;
         break;
@@ -127,7 +130,7 @@ export const POSCanvas = ({ card, logoUrl }: Props) => {
             bottom: 0,
           } : {}),
           background: isFullbleed ? `${card.panelBg}${PANEL_ALPHA_HEX}` : card.panelBg,
-          padding: "32px 28px 48px 28px",
+          padding: "32px 28px 24px 28px",
           display: "flex",
           flexDirection: "column",
         }}>

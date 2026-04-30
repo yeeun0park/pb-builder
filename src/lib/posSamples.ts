@@ -77,28 +77,20 @@ export const sampleBabMeokGoPaba4 = {
       style: { align: "center", fontSize: 22, lineHeight: 1.2, marginBottom: 16 },
     },
     {
-      id: "bmgp4-text1",
-      type: "textLine",
-      text: "05.04 ~ 05.31",
-      style: { align: "center", fontSize: 18, lineHeight: 1.4, marginBottom: 16 },
-    },
-    {
-      id: "bmgp4-text2",
-      type: "textLine",
-      text: "제조음료 + 인기디저트",
-      style: { align: "center", fontSize: 14, lineHeight: 1.35 },
-    },
-    {
-      id: "bmgp4-text3",
-      type: "textLine",
-      text: "9,300원 이상 구매 시 4,650원 OFF",
-      style: { align: "center", fontSize: 14, lineHeight: 1.35, marginBottom: 24 },
+      id: "bmgp4-text-group",
+      type: "textGroup",
+      lines: [
+        "05.04 ~ 05.31",
+        "제조음료 + 인기디저트",
+        "9,300원 이상 구매 시 4,650원 OFF",
+      ],
+      style: { align: "center", fontSize: 14, lineHeight: 1.5, marginBottom: 24 },
     },
     {
       id: "bmgp4-qr",
       type: "qrBlock",
       caption: "파바앱에서\n선착순 쿠폰 받기",
-      style: { align: "center" },
+      style: { align: "center", scale: 1.6 },
     },
   ],
 } satisfies POSCard;

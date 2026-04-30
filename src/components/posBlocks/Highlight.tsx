@@ -15,7 +15,7 @@ export const Highlight = ({ block, color }: Props) => {
         letterSpacing: "-0.05em",
         lineHeight: s.lineHeight ?? 1.25,
         marginTop: s.marginTop,
-        marginBottom: s.marginBottom ?? 16,
+        marginBottom: s.marginBottom ?? 32,
         textAlign: s.align ?? "center",
       }}
     >

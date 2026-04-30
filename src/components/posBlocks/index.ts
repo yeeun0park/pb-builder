@@ -3,5 +3,6 @@ export * from "./Title";
 export * from "./Highlight";
 export * from "./PillRow";
 export * from "./TextLine";
+export * from "./TextGroup";
 export * from "./RankList";
 export * from "./QRBlock";
