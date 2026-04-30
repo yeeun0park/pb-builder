@@ -26,8 +26,9 @@ export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
         alignItems: isVertical ? "stretch" : "flex-end",
         // vertical 외곽은 fit-content (QR width 130에 맞춤)
         width: isVertical ? "fit-content" : undefined,
-        // 부모(패널) 안에서 가로 정렬은 alignSelf로
-        alignSelf: isVertical ? justify : undefined,
+        // 부모 wrapper가 block이라 alignSelf 안 통함 → margin auto로 가로 정렬
+        marginLeft: isVertical && s.align !== "left" ? "auto" : undefined,
+        marginRight: isVertical && s.align !== "right" ? "auto" : undefined,
         gap: isVertical ? 8 : 12,
         marginTop,
         marginBottom: s.marginBottom,
