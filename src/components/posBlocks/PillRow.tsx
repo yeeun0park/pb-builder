@@ -11,11 +11,11 @@ export const PillRow = ({ block, pillBg, pillText, textColor }: Props) => {
   if (block.items.length === 0) return null;
   const s = block.style ?? {};
   const rowJustify =
-    s.align === "left"
-      ? "flex-start"
-      : s.align === "right"
+    s.align === "right"
       ? "flex-end"
-      : "center";
+      : s.align === "center"
+      ? "center"
+      : "flex-start";
   return (
     <div
       style={{
@@ -45,11 +45,12 @@ export const PillRow = ({ block, pillBg, pillText, textColor }: Props) => {
               fontSize: 14,
               fontWeight: 700,
               letterSpacing: "-0.04em",
+              whiteSpace: "nowrap",
             }}
           >
             {item.label}
           </span>
-          <span style={{ color: textColor, fontSize: 16, fontWeight: 700 }}>
+          <span style={{ color: textColor, fontSize: 16, fontWeight: 700, whiteSpace: "nowrap" }}>
             {item.value}
           </span>
         </div>
