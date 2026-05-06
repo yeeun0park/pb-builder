@@ -15,6 +15,12 @@ export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
   const marginTop: string | number =
     s.marginTop !== undefined ? s.marginTop : "auto";
 
+  // 레이아웃별 기본값
+  // vertical: 캡션 fontSize 10.5px, 전체 scale 1.25 (QR/로고 비율과 맞춤)
+  // horizontal: 전체 scale 1.15 (좌측 QR + 우측 로고/캡션 정렬 시 비율 맞춤)
+  const effectiveFontSize = s.fontSize ?? (isVertical ? 10.5 : 13);
+  const effectiveScale = s.scale ?? (isVertical ? 1.25 : 1.15);
+
   // horizontal: 이전 동작 (좌측 정렬, 로고/캡션 옆 column)
   // vertical: 새 동작 (가운데 정렬, 로고/캡션 row 묶음 아래)
   return (
@@ -33,7 +39,7 @@ export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
         marginTop,
         marginBottom: s.marginBottom,
         justifyContent: isVertical ? undefined : (s.align ? justify : "flex-start"),
-        transform: s.scale && s.scale !== 1 ? `scale(${s.scale})` : undefined,
+        transform: effectiveScale !== 1 ? `scale(${effectiveScale})` : undefined,
         transformOrigin: "center top",
       }}
     >
@@ -52,12 +58,16 @@ export const QRBlock = ({ block, logoUrl, textColor }: Props) => {
         }}
       >
         {logoUrl ? (
-          <img src={logoUrl} alt="파바앱 로고" style={{ width: 40, height: 40 }} />
+          <img
+            src={logoUrl}
+            alt="파바앱 로고"
+            style={{ width: block.logoSize ?? 40, height: block.logoSize ?? 40 }}
+          />
         ) : null}
         <div
           style={{
             color: s.color ?? textColor,
-            fontSize: s.fontSize ?? 13,
+            fontSize: effectiveFontSize,
             fontWeight: 700,
             lineHeight: s.lineHeight ?? 1.4,
             whiteSpace: "pre-line",

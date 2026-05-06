@@ -81,6 +81,7 @@ export const QRBlockSchema = z.object({
   qrDataUrl: z.string().optional(),
   caption: z.string().default(""),
   layout: z.enum(["horizontal", "vertical"]).default("horizontal"),
+  logoSize: z.number().int().min(20).max(120).optional(),
   style: BlockStyleSchema.optional(),
 });
 
@@ -94,6 +95,15 @@ export const POSBlockSchema = z.discriminatedUnion("type", [
   RankListBlockSchema,
   QRBlockSchema,
 ]);
+
+export const DecorationSchema = z.object({
+  id: BlockId,
+  src: z.string(),
+  x: z.number(),
+  y: z.number(),
+  width: z.number().min(10).max(800),
+  height: z.number().min(10).max(800),
+});
 
 export const POSCardSchema = z.object({
   layout: z.enum(["split", "fullbleed"]).default("split"),
@@ -109,6 +119,7 @@ export const POSCardSchema = z.object({
   pillBg: HexColor.default("#3A4FB8"),
   pillText: HexColor.default("#FFFFFF"),
   blocks: z.array(POSBlockSchema).default([]),
+  decorations: z.array(DecorationSchema).default([]),
 });
 
 export type EyebrowBlock = z.infer<typeof EyebrowBlockSchema>;
@@ -122,4 +133,5 @@ export type RankItem = z.infer<typeof RankItemSchema>;
 export type RankListBlock = z.infer<typeof RankListBlockSchema>;
 export type QRBlock = z.infer<typeof QRBlockSchema>;
 export type POSBlock = z.infer<typeof POSBlockSchema>;
+export type Decoration = z.infer<typeof DecorationSchema>;
 export type POSCard = z.infer<typeof POSCardSchema>;

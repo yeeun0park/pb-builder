@@ -4,7 +4,7 @@ import type { POSCard } from "./posSchema";
 // Title: 중간 크기 1줄, Highlight: Title보다 약간 크고 굵음, textLine: 작고 2줄 간격 좁음
 export const sampleBabMeokGoPaba = {
   layout: "split",
-  splitRatio: 0.6,
+  splitRatio: 0.57,
   keyVisualPosition: { x: 50, y: 50 },
   panelBg: "#F5EFD8",
   textPrimary: "#1A2D5A",
@@ -16,34 +16,35 @@ export const sampleBabMeokGoPaba = {
       id: "bmgp-title",
       type: "title",
       lines: ["밥 먹고 파바 고?"],
-      style: { align: "center", fontSize: 22, lineHeight: 1.3, marginBottom: 8 },
+      style: { align: "center", fontSize: 25, lineHeight: 1.3, marginBottom: 16, scale: 1.5 },
     },
     {
       id: "bmgp-highlight",
       type: "highlight",
       lines: ["SET 최대 50% 혜택!"],
-      style: { align: "center", fontSize: 24, lineHeight: 1.2, marginBottom: 36 },
+      style: { align: "center", fontSize: 27, lineHeight: 1.2, marginTop: 2, marginBottom: 36 },
     },
     {
       id: "bmgp-text1",
       type: "textLine",
       text: "1차 쿠폰 발급 : 4/6 ~ 4/10",
-      style: { fontSize: 16, lineHeight: 1.4 },
+      style: { fontSize: 20, lineHeight: 1.4 },
     },
     {
       id: "bmgp-text2",
       type: "textLine",
       text: "2차 쿠폰 발급 : 4/11 ~ 4/15",
-      style: { fontSize: 16, lineHeight: 1.4, marginBottom: 32 },
+      style: { fontSize: 20, lineHeight: 1.4, marginBottom: 32 },
     },
     {
       id: "bmgp-qr",
       type: "qrBlock",
       caption: "파바앱으로\n쿠폰 받으러 가기!",
       layout: "horizontal",
-      style: { align: "center" },
+      style: { align: "center", scale: 1.15 },
     },
   ],
+  decorations: [],
 } satisfies POSCard;
 
 // 시안: 밥먹고파바고 4차_POS.jpg (split)
@@ -95,48 +96,7 @@ export const sampleBabMeokGoPaba4 = {
       style: { align: "center", scale: 1.25 },
     },
   ],
-} satisfies POSCard;
-
-// 시안: 가정의달케이크사전예약_POS.jpg (split)
-// Title: 2줄 중간, Highlight: 2줄 매우 큼 (가장 강조), pillRow 2행
-export const sampleFamilyMonth = {
-  layout: "split",
-  splitRatio: 0.6,
-  keyVisualPosition: { x: 50, y: 50 },
-  panelBg: "#E8E5F2",
-  textPrimary: "#1A2D5A",
-  textAccent: "#1A2D5A",
-  pillBg: "#3A4FB8",
-  pillText: "#FFFFFF",
-  blocks: [
-    {
-      id: "fm-title",
-      type: "title",
-      lines: ["가정의 달 케이크", "사전예약 하면"],
-      style: { fontSize: 26, lineHeight: 1.3, marginBottom: 10 },
-    },
-    {
-      id: "fm-highlight",
-      type: "highlight",
-      lines: ["아이스 아메리카노", "쿠폰 증정!"],
-      style: { fontSize: 32, lineHeight: 1.25, marginBottom: 28 },
-    },
-    {
-      id: "fm-pills",
-      type: "pillRow",
-      items: [
-        { label: "사전 예약", value: "4/24(금) - 4/29(수)" },
-        { label: "매장 픽업", value: "5/2(토) - 5/15(금)" },
-      ],
-      style: { marginBottom: 24 },
-    },
-    {
-      id: "fm-qr",
-      type: "qrBlock",
-      caption: "파바앱에서 다양한\n가정의 달 케이크 만나보기!",
-      layout: "horizontal",
-    },
-  ],
+  decorations: [],
 } satisfies POSCard;
 
 // 시안: 파란장미케이크오브제_POS.jpg (split)
@@ -177,60 +137,14 @@ export const sampleParanRose = {
       type: "qrBlock",
       caption: "파바앱에서 한정수량\n사전예약 하기",
       layout: "horizontal",
+      style: { align: "center", scale: 1.15 },
     },
   ],
-} satisfies POSCard;
-
-// 시안: 저당말차케이크_해피TV.jpg (split)
-// Eyebrow: 소형 강조색, Highlight: 3줄 (길이 길어 fontSize 작게), pillRow 2행
-export const sampleMatchaCake = {
-  layout: "split",
-  splitRatio: 0.6,
-  keyVisualPosition: { x: 50, y: 50 },
-  panelBg: "#3D6B35",
-  textPrimary: "#FFFFFF",
-  textAccent: "#FFFFFF",
-  pillBg: "#4A8C3F",
-  pillText: "#FFFFFF",
-  blocks: [
-    {
-      id: "mc-eyebrow",
-      type: "eyebrow",
-      text: "파바앱 ONLY",
-      style: { fontSize: 14, lineHeight: 1.4, marginBottom: 10 },
-    },
-    {
-      id: "mc-highlight",
-      type: "highlight",
-      lines: [
-        "파란라벨 저당 말차케이크",
-        "한정수량 & 선착순",
-        "사전예약 5천원 즉시 혜택!",
-      ],
-      style: { fontSize: 24, lineHeight: 1.3, marginBottom: 28 },
-    },
-    {
-      id: "mc-pills",
-      type: "pillRow",
-      items: [
-        { label: "예약기간", value: "4/10(금) · 한정수량 소진 시" },
-        { label: "픽업기간", value: "4/24(금) · 4/30(목)" },
-      ],
-      style: { marginBottom: 24 },
-    },
-    {
-      id: "mc-qr",
-      type: "qrBlock",
-      caption: "파바앱 혜택받고\n사전예약 하러 가기!",
-      layout: "horizontal",
-    },
-  ],
+  decorations: [],
 } satisfies POSCard;
 
 export const samplePosCards: Record<string, POSCard> = {
   babMeokGoPaba: sampleBabMeokGoPaba,
   babMeokGoPaba4: sampleBabMeokGoPaba4,
-  familyMonth: sampleFamilyMonth,
   paranRose: sampleParanRose,
-  matchaCake: sampleMatchaCake,
 };

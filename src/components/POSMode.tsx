@@ -61,7 +61,13 @@ export const POSMode = ({ previewRef }: Props) => {
       case "rankList":
         return { id, type, items: [] };
       case "qrBlock":
-        return { id, type, caption: "", layout: "horizontal" as const };
+        return {
+          id,
+          type,
+          caption: "",
+          layout: "horizontal" as const,
+          style: { align: "center" as const, scale: 1.15 },
+        };
     }
   };
 
@@ -278,6 +284,46 @@ const updateStyle = (block: POSBlock, key: keyof BlockStyle, value: BlockStyle[k
   return next;
 };
 
+type SliderInputProps = {
+  label: string;
+  value: number | undefined;
+  onChange: (v: number | undefined) => void;
+  min: number;
+  max: number;
+  step?: number;
+  placeholder?: string;
+};
+
+const SliderInput = ({ label, value, onChange, min, max, step = 1, placeholder = "자동" }: SliderInputProps) => {
+  const sliderValue = value ?? min;
+  return (
+    <label className="flex flex-col gap-1">
+      <span className="flex items-center justify-between gap-1">
+        <span>{label}</span>
+        <input
+          type="number"
+          min={min}
+          max={max}
+          step={step}
+          value={value ?? ""}
+          onChange={(e) => onChange(e.target.value === "" ? undefined : Number(e.target.value))}
+          className="w-14 rounded border px-1 py-0.5 text-right"
+          placeholder={placeholder}
+        />
+      </span>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={sliderValue}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="w-full"
+      />
+    </label>
+  );
+};
+
 const StyleEditor = ({ block, update }: { block: POSBlock; update: (next: POSBlock) => void }) => {
   const s = block.style ?? {};
   return (
@@ -297,26 +343,18 @@ const StyleEditor = ({ block, update }: { block: POSBlock; update: (next: POSBlo
             <option value="right">우측</option>
           </select>
         </label>
-        <label className="flex flex-col gap-1">
-          글자 크기 (px)
-          <input
-            type="number" min={8} max={72}
-            value={s.fontSize ?? ""}
-            onChange={(e) => update(updateStyle(block, "fontSize", e.target.value === "" ? undefined : Number(e.target.value)))}
-            className="rounded border px-1 py-0.5"
-            placeholder="자동"
-          />
-        </label>
-        <label className="flex flex-col gap-1">
-          행간 (예: 1.3)
-          <input
-            type="number" step={0.05} min={0.8} max={3}
-            value={s.lineHeight ?? ""}
-            onChange={(e) => update(updateStyle(block, "lineHeight", e.target.value === "" ? undefined : Number(e.target.value)))}
-            className="rounded border px-1 py-0.5"
-            placeholder="자동"
-          />
-        </label>
+        <SliderInput
+          label="글자 크기 (px)"
+          min={8} max={72}
+          value={s.fontSize}
+          onChange={(v) => update(updateStyle(block, "fontSize", v))}
+        />
+        <SliderInput
+          label="행간"
+          min={0.8} max={3} step={0.05}
+          value={s.lineHeight}
+          onChange={(v) => update(updateStyle(block, "lineHeight", v))}
+        />
         <label className="flex flex-col gap-1">
           색상
           <div className="flex gap-1">
@@ -331,36 +369,25 @@ const StyleEditor = ({ block, update }: { block: POSBlock; update: (next: POSBlo
             )}
           </div>
         </label>
-        <label className="flex flex-col gap-1">
-          위 여백 (px)
-          <input
-            type="number" min={0} max={200}
-            value={s.marginTop ?? ""}
-            onChange={(e) => update(updateStyle(block, "marginTop", e.target.value === "" ? undefined : Number(e.target.value)))}
-            className="rounded border px-1 py-0.5"
-            placeholder="자동"
-          />
-        </label>
-        <label className="flex flex-col gap-1">
-          아래 여백 (px)
-          <input
-            type="number" min={0} max={200}
-            value={s.marginBottom ?? ""}
-            onChange={(e) => update(updateStyle(block, "marginBottom", e.target.value === "" ? undefined : Number(e.target.value)))}
-            className="rounded border px-1 py-0.5"
-            placeholder="자동"
-          />
-        </label>
-        <label className="flex flex-col gap-1">
-          전체 크기 (배율)
-          <input
-            type="number" step={0.05} min={0.3} max={3}
-            value={s.scale ?? ""}
-            onChange={(e) => update(updateStyle(block, "scale", e.target.value === "" ? undefined : Number(e.target.value)))}
-            className="rounded border px-1 py-0.5"
-            placeholder="1"
-          />
-        </label>
+        <SliderInput
+          label="위 여백 (px)"
+          min={0} max={200}
+          value={s.marginTop}
+          onChange={(v) => update(updateStyle(block, "marginTop", v))}
+        />
+        <SliderInput
+          label="아래 여백 (px)"
+          min={0} max={200}
+          value={s.marginBottom}
+          onChange={(v) => update(updateStyle(block, "marginBottom", v))}
+        />
+        <SliderInput
+          label="전체 크기 (배율)"
+          min={0.3} max={3} step={0.05}
+          value={s.scale}
+          onChange={(v) => update(updateStyle(block, "scale", v))}
+          placeholder="1"
+        />
       </div>
     </details>
   );
@@ -510,9 +537,16 @@ const BlockEditor = ({ block, update }: { block: POSBlock; update: (next: POSBlo
         <div className="mt-1 flex flex-col gap-1">
           <select
             value={block.layout}
-            onChange={(e) =>
-              update({ ...block, layout: e.target.value as "horizontal" | "vertical" })
-            }
+            onChange={(e) => {
+              // 레이아웃 토글 시 scale을 새 레이아웃의 기본 배율(가로 1.15 / 세로 1.25)로 갈아끼움
+              const newLayout = e.target.value as "horizontal" | "vertical";
+              const newScale = newLayout === "vertical" ? 1.25 : 1.15;
+              update({
+                ...block,
+                layout: newLayout,
+                style: { ...(block.style ?? {}), scale: newScale },
+              });
+            }}
             className="rounded border px-2 py-1 text-xs"
           >
             <option value="horizontal">가로 (QR 좌 + 로고/캡션 우)</option>
@@ -534,6 +568,13 @@ const BlockEditor = ({ block, update }: { block: POSBlock; update: (next: POSBlo
             placeholder="캡션"
             onChange={(e) => update({ ...block, caption: e.target.value })}
             className="rounded border px-1 text-xs"
+          />
+          <SliderInput
+            label="로고 크기 (px)"
+            min={20} max={120}
+            value={block.logoSize}
+            onChange={(v) => update({ ...block, logoSize: v })}
+            placeholder="40"
           />
           <StyleEditor block={block} update={update} />
         </div>

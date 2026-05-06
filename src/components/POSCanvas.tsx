@@ -1,7 +1,9 @@
 import { useState } from "react";
-import type { POSCard, POSBlock } from "@/lib/posSchema";
+import { nanoid } from "nanoid";
+import type { POSCard, POSBlock, Decoration as DecorationType } from "@/lib/posSchema";
 import { useCampaignStore } from "@/lib/store";
 import { Eyebrow, Title, Highlight, PillRow, TextLine, TextGroup, RankList, QRBlock } from "./posBlocks";
+import { Decoration } from "./Decoration";
 
 const PANEL_ALPHA_HEX = "E0"; // fullbleed 패널 88% 불투명
 
@@ -11,7 +13,69 @@ type DragState = { id: string; startY: number; deltaY: number } | null;
 
 export const POSCanvas = ({ card, logoUrl }: Props) => {
   const updatePosBlock = useCampaignStore((s) => s.updatePosBlock);
+  const updatePosCardField = useCampaignStore((s) => s.updatePosCardField);
   const [drag, setDrag] = useState<DragState>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+
+  const onDragOver = (e: React.DragEvent) => {
+    if (!Array.from(e.dataTransfer.items).some((i) => i.kind === "file")) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+    if (!isDragOver) setIsDragOver(true);
+  };
+  const onDragLeave = (e: React.DragEvent) => {
+    // 자식으로 들어갈 때 발생하는 leave는 무시 (currentTarget을 실제로 벗어날 때만 끔)
+    const related = e.relatedTarget as Node | null;
+    if (!related || !(e.currentTarget as Node).contains(related)) {
+      setIsDragOver(false);
+    }
+  };
+  const onDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const file = e.dataTransfer.files?.[0];
+    if (!file || !file.type.startsWith("image/")) return;
+
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const dropX = e.clientX - rect.left;
+    const dropY = e.clientY - rect.top;
+
+    const dataUrl = await new Promise<string>((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(typeof r.result === "string" ? r.result : "");
+      r.onerror = () => reject(r.error);
+      r.readAsDataURL(file);
+    });
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const i = new Image();
+      i.onload = () => resolve(i);
+      i.onerror = () => reject(new Error("이미지 로드 실패"));
+      i.src = dataUrl;
+    });
+    const longest = Math.max(img.naturalWidth, img.naturalHeight);
+    const scale = longest > 200 ? 200 / longest : 1;
+    const w = Math.round(img.naturalWidth * scale);
+    const h = Math.round(img.naturalHeight * scale);
+
+    const next: DecorationType = {
+      id: nanoid(8),
+      src: dataUrl,
+      x: Math.round(dropX - w / 2),
+      y: Math.round(dropY - h / 2),
+      width: w,
+      height: h,
+    };
+    updatePosCardField("decorations", [...(card.decorations ?? []), next]);
+  };
+
+  const updateDecoration = (next: DecorationType) => {
+    const arr = (card.decorations ?? []).map((d) => (d.id === next.id ? next : d));
+    updatePosCardField("decorations", arr);
+  };
+  const removeDecoration = (id: string) => {
+    const arr = (card.decorations ?? []).filter((d) => d.id !== id);
+    updatePosCardField("decorations", arr);
+  };
 
   const onPointerDown = (e: React.PointerEvent, blockId: string) => {
     if (e.target instanceof HTMLElement) {
@@ -107,13 +171,20 @@ export const POSCanvas = ({ card, logoUrl }: Props) => {
   const bgPos = `${card.keyVisualPosition.x}% ${card.keyVisualPosition.y}%`;
 
   return (
-    <div style={{
-      width: 800, height: 600, position: "relative",
-      background: isFullbleed
-        ? (card.keyVisualUrl ? `url(${card.keyVisualUrl}) ${bgPos}/cover` : card.panelBg)
-        : "#fff",
-      fontFamily: "PBGothic, sans-serif",
-    }}>
+    <div
+      onDragOver={onDragOver}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
+      style={{
+        width: 800, height: 600, position: "relative",
+        background: isFullbleed
+          ? (card.keyVisualUrl ? `url(${card.keyVisualUrl}) ${bgPos}/cover` : card.panelBg)
+          : "#fff",
+        fontFamily: "PBGothic, sans-serif",
+        outline: isDragOver ? "3px dashed #3A4FB8" : undefined,
+        outlineOffset: isDragOver ? "-3px" : undefined,
+      }}
+    >
       <div style={{ display: "flex", width: "100%", height: "100%", position: "relative" }}>
         {!isFullbleed && (
           <div style={{
@@ -137,6 +208,14 @@ export const POSCanvas = ({ card, logoUrl }: Props) => {
           {card.blocks.map(renderBlock)}
         </div>
       </div>
+      {(card.decorations ?? []).map((d) => (
+        <Decoration
+          key={d.id}
+          decoration={d}
+          update={updateDecoration}
+          remove={() => removeDecoration(d.id)}
+        />
+      ))}
     </div>
   );
 };
