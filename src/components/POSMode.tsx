@@ -212,8 +212,6 @@ export const POSMode = ({ previewRef }: Props) => {
               "highlight",
               "pillRow",
               "textLine",
-              "textGroup",
-              "rankList",
               "qrBlock",
             ] as const
           ).map((t) => (

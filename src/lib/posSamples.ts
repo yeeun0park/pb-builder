@@ -70,7 +70,7 @@ export const sampleBabMeokGoPaba4 = {
       id: "bmgp4-title",
       type: "title",
       lines: ["밥 먹고 파바 고?"],
-      style: { align: "center", fontSize: 24, lineHeight: 1.3, marginBottom: 6 },
+      style: { align: "center", fontSize: 39, lineHeight: 1.3, marginBottom: 6 },
     },
     {
       id: "bmgp4-highlight",
@@ -81,12 +81,14 @@ export const sampleBabMeokGoPaba4 = {
     {
       id: "bmgp4-text-group",
       type: "textGroup",
-      lines: [
-        "05.04 ~ 05.31",
-        "제조음료 + 인기디저트",
-        "9,300원 이상 구매 시 4,650원 OFF",
-      ],
-      style: { align: "center", fontSize: 14, lineHeight: 1.5, marginBottom: 24 },
+      lines: ["05.04 ~ 05.31"],
+      style: { align: "center", fontSize: 21, lineHeight: 1.5, marginTop: 0, marginBottom: 24, scale: 1.05 },
+    },
+    {
+      id: "bmgp4-highlight-detail",
+      type: "highlight",
+      lines: ["제조음료 + 인기디저트", "9,300원 이상 구매 시 4,650원 OFF"],
+      style: { fontSize: 17 },
     },
     {
       id: "bmgp4-qr",
