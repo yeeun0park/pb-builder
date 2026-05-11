@@ -3,6 +3,27 @@ import { create } from "zustand";
 import { CampaignSchema } from "./schema";
 import type { Campaign, Section, SectionType } from "./types";
 import { POSCardSchema, type POSCard, type POSBlock } from "./posSchema";
+import type { MultiImageItem } from "@/components/ui/MultiImageInput";
+
+export type AutoForm = {
+  title: string;
+  subhead: string;
+  period: string;
+  themeColor: string;
+  description: string;
+  images: MultiImageItem[];
+  showOptional: boolean;
+};
+
+const defaultAutoForm = (): AutoForm => ({
+  title: "",
+  subhead: "",
+  period: "",
+  themeColor: "#09275A",
+  description: "",
+  images: [],
+  showOptional: false,
+});
 
 const createEmptySection = (type: SectionType): Section => {
   const id = nanoid(8);
@@ -59,6 +80,7 @@ type State = {
   selectedSectionId: string | null;
   htmlOutput: string;
   posCard: POSCard;
+  autoForm: AutoForm;
 };
 
 type Actions = {
@@ -78,6 +100,7 @@ type Actions = {
   removePosBlock: (id: string) => void;
   movePosBlock: (id: string, direction: "up" | "down") => void;
   updatePosBlock: (block: POSBlock) => void;
+  updateAutoForm: (patch: Partial<AutoForm>) => void;
 };
 
 export const useCampaignStore = create<State & Actions>((set, get) => ({
@@ -85,8 +108,12 @@ export const useCampaignStore = create<State & Actions>((set, get) => ({
   selectedSectionId: null,
   htmlOutput: "",
   posCard: defaultPosCard(),
+  autoForm: defaultAutoForm(),
 
   setHtmlOutput: (html) => set({ htmlOutput: html }),
+
+  updateAutoForm: (patch) =>
+    set((s) => ({ autoForm: { ...s.autoForm, ...patch } })),
 
   updateMeta: (patch) =>
     set((s) => ({ campaign: { ...s.campaign, ...patch } })),
@@ -152,6 +179,7 @@ export const useCampaignStore = create<State & Actions>((set, get) => ({
       selectedSectionId: null,
       htmlOutput: "",
       posCard: defaultPosCard(),
+      autoForm: defaultAutoForm(),
     }),
 
   setPosCard: (card) => set({ posCard: card }),

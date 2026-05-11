@@ -9,10 +9,7 @@ import { geminiGenerateHtml } from "@/lib/geminiHtml";
 import { useCampaignStore } from "@/lib/store";
 import { FieldLabel } from "./ui/FieldLabel";
 import { HtmlExportPanel } from "./HtmlExportPanel";
-import {
-  type MultiImageItem,
-  MultiImageInput,
-} from "./ui/MultiImageInput";
+import { MultiImageInput } from "./ui/MultiImageInput";
 
 type Props = {
   onGenerated: () => void;
@@ -25,16 +22,13 @@ const inputCls =
 export const AutoMode = ({ onGenerated, previewRef }: Props) => {
   const htmlOutput = useCampaignStore((s) => s.htmlOutput);
   const setHtmlOutput = useCampaignStore((s) => s.setHtmlOutput);
+  const autoForm = useCampaignStore((s) => s.autoForm);
+  const updateAutoForm = useCampaignStore((s) => s.updateAutoForm);
 
-  const [title, setTitle] = useState("");
-  const [subhead, setSubhead] = useState("");
-  const [period, setPeriod] = useState("");
-  const [themeColor, setThemeColor] = useState("#09275A");
-  const [description, setDescription] = useState("");
-  const [images, setImages] = useState<MultiImageItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showOptional, setShowOptional] = useState(false);
+
+  const { title, subhead, period, themeColor, description, images, showOptional } = autoForm;
 
   const optionalFilledCount =
     (title.trim() ? 1 : 0) +
@@ -84,7 +78,7 @@ export const AutoMode = ({ onGenerated, previewRef }: Props) => {
         <textarea
           rows={10}
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) => updateAutoForm({ description: e.target.value })}
           placeholder="매장·제품·브랜드·혜택 등 자유롭게 작성. AI가 읽고 적절한 섹션으로 분배합니다."
           className="rounded-lg border border-porcelain-300 bg-white px-3 py-2.5 text-[14px] leading-relaxed text-porcelain-800 focus:outline-none"
         />
@@ -94,13 +88,16 @@ export const AutoMode = ({ onGenerated, previewRef }: Props) => {
         <span className="text-[13px] font-bold text-porcelain-700">
           이미지 (순서대로)
         </span>
-        <MultiImageInput items={images} onChange={setImages} />
+        <MultiImageInput
+          items={images}
+          onChange={(next) => updateAutoForm({ images: next })}
+        />
       </div>
 
       <div className="flex flex-col gap-3 rounded-lg border border-porcelain-200 bg-porcelain-50">
         <button
           type="button"
-          onClick={() => setShowOptional((v) => !v)}
+          onClick={() => updateAutoForm({ showOptional: !showOptional })}
           aria-expanded={showOptional}
           className="flex items-center justify-between gap-2 px-4 py-3 text-left transition hover:bg-porcelain-100"
         >
@@ -128,7 +125,7 @@ export const AutoMode = ({ onGenerated, previewRef }: Props) => {
               <input
                 type="text"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => updateAutoForm({ title: e.target.value })}
                 placeholder="예: 파란라벨이라면 건강도 습관이 됩니다"
                 className={inputCls}
               />
@@ -138,7 +135,7 @@ export const AutoMode = ({ onGenerated, previewRef }: Props) => {
               <input
                 type="text"
                 value={subhead}
-                onChange={(e) => setSubhead(e.target.value)}
+                onChange={(e) => updateAutoForm({ subhead: e.target.value })}
                 placeholder="예: 매일의 건강한 한 조각"
                 className={inputCls}
               />
@@ -148,7 +145,7 @@ export const AutoMode = ({ onGenerated, previewRef }: Props) => {
               <input
                 type="text"
                 value={period}
-                onChange={(e) => setPeriod(e.target.value)}
+                onChange={(e) => updateAutoForm({ period: e.target.value })}
                 placeholder="2026-04-09 ~ 2026-12-31"
                 className={inputCls}
               />
@@ -159,13 +156,13 @@ export const AutoMode = ({ onGenerated, previewRef }: Props) => {
                 <input
                   type="color"
                   value={themeColor}
-                  onChange={(e) => setThemeColor(e.target.value)}
+                  onChange={(e) => updateAutoForm({ themeColor: e.target.value })}
                   className="h-11 w-14 cursor-pointer rounded-lg border border-porcelain-300"
                 />
                 <input
                   type="text"
                   value={themeColor}
-                  onChange={(e) => setThemeColor(e.target.value)}
+                  onChange={(e) => updateAutoForm({ themeColor: e.target.value })}
                   className={`${inputCls} flex-1`}
                 />
               </div>
