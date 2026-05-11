@@ -8,6 +8,7 @@ import {
 import { Boxes, Image as ImageIcon, Info, Palette, Rows2 } from "lucide-react";
 import { processImageFile } from "@/lib/imageUpload";
 import { useCampaignStore } from "@/lib/store";
+import { HtmlExportPanel } from "./HtmlExportPanel";
 
 type Props = {
   previewRef: RefObject<HTMLIFrameElement | null>;
@@ -1158,6 +1159,8 @@ export const HtmlDetailMode = ({ previewRef }: Props) => {
           />
         </div>
       )}
+
+      <HtmlExportPanel previewRef={previewRef} htmlOutput={htmlOutput} />
     </div>
   );
 };
