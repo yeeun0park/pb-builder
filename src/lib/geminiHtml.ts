@@ -403,8 +403,36 @@ export const geminiGenerateHtml = async (
     return { mimeType: match[1], data: match[2] };
   };
 
-  const imageParts = params.images
-    .map((img) => parseDataUri(img.image))
+  // Vercel Hobby limits function request body to 4.5MB. Originals stay in
+  // params.images for final HTML substitution; only the copy sent to Gemini
+  // is downscaled (sufficient for layout/caption decisions).
+  const MAX_DIM = 1024;
+  const JPEG_QUALITY = 0.85;
+  const downscaleForApi = async (dataUri: string): Promise<string> => {
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const el = new Image();
+      el.onload = () => resolve(el);
+      el.onerror = () => reject(new Error("이미지 로드 실패"));
+      el.src = dataUri;
+    });
+    const scale = Math.min(MAX_DIM / img.width, MAX_DIM / img.height, 1);
+    if (scale >= 1) return dataUri;
+    const w = Math.round(img.width * scale);
+    const h = Math.round(img.height * scale);
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return dataUri;
+    ctx.drawImage(img, 0, 0, w, h);
+    return canvas.toDataURL("image/jpeg", JPEG_QUALITY);
+  };
+
+  const downscaledImages = await Promise.all(
+    params.images.map((img) => downscaleForApi(img.image)),
+  );
+  const imageParts = downscaledImages
+    .map((dataUri) => parseDataUri(dataUri))
     .filter((x): x is { mimeType: string; data: string } => x !== null)
     .map((p) => ({
       inline_data: { mime_type: p.mimeType, data: p.data },
