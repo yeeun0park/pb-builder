@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { geminiGenerateHtml } from "@/lib/geminiHtml";
-import { getGeminiKey, hasGeminiKey } from "@/lib/geminiKey";
 import {
   captureIframeAsJpeg,
   downloadHtmlFile,
@@ -8,7 +7,6 @@ import {
 } from "@/lib/htmlExport";
 import { useCampaignStore } from "@/lib/store";
 import { FieldLabel } from "./ui/FieldLabel";
-import { GeminiKeyPanel } from "./GeminiKeyPanel";
 import {
   type MultiImageItem,
   MultiImageInput,
@@ -44,7 +42,6 @@ export const AutoMode = ({ onGenerated, previewRef }: Props) => {
   const [themeColor, setThemeColor] = useState("#2B75B9");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState<MultiImageItem[]>([]);
-  const [keyRev, setKeyRev] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [exportingJpg, setExportingJpg] = useState(false);
@@ -52,7 +49,6 @@ export const AutoMode = ({ onGenerated, previewRef }: Props) => {
   const filenameBase = useRef("pb-campaign");
 
   const canGenerate =
-    hasGeminiKey() &&
     (title.trim().length > 0 || description.trim().length > 0) &&
     images.length > 0 &&
     !loading;
@@ -62,7 +58,6 @@ export const AutoMode = ({ onGenerated, previewRef }: Props) => {
     setLoading(true);
     try {
       const html = await geminiGenerateHtml({
-        apiKey: getGeminiKey(),
         title,
         subhead,
         period,
@@ -124,10 +119,6 @@ export const AutoMode = ({ onGenerated, previewRef }: Props) => {
         Gemini가 레퍼런스(paris.co.kr)를 참고해 완전 커스텀 HTML·CSS를 생성합니다.
         결과는 우측 프리뷰에서 확인하고, 하단 버튼으로 PDF·JPG로 내려받을 수 있습니다.
       </div>
-
-      <GeminiKeyPanel onChange={() => setKeyRev((v) => v + 1)} />
-
-      <div key={keyRev} />
 
       <FieldLabel label="제목 (비우면 설명글에서 자동 추출)">
         <input
@@ -205,11 +196,9 @@ export const AutoMode = ({ onGenerated, previewRef }: Props) => {
       >
         {loading
           ? "Gemini 분석·HTML 생성 중…"
-          : !hasGeminiKey()
-            ? "Gemini API 키 설정 필요"
-            : canGenerate
-              ? "AI로 상세페이지 HTML 생성"
-              : "설명글 + 이미지 1장 이상 필요"}
+          : canGenerate
+            ? "AI로 상세페이지 HTML 생성"
+            : "설명글 + 이미지 1장 이상 필요"}
       </button>
 
       {htmlOutput && (

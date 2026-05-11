@@ -2,16 +2,7 @@ import type { MultiImageItem } from "@/components/ui/MultiImageInput";
 import { getLogoDataUrl } from "./assets";
 import { getEmbeddedFontCss } from "./fontBase64";
 
-const MODEL_CHAIN = [
-  "gemini-2.5-flash",
-  "gemini-2.5-flash-lite",
-  "gemini-1.5-flash",
-];
-const endpointFor = (model: string) =>
-  `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
-
 export type GeminiHtmlParams = {
-  apiKey: string;
   title?: string;
   subhead?: string;
   period?: string;
@@ -433,66 +424,26 @@ export const geminiGenerateHtml = async (
     },
   });
 
-  const callOne = async (model: string): Promise<string> => {
-    const RETRYABLE = new Set([429, 500, 502, 503, 504]);
-    const ATTEMPTS = 3;
-    const DELAYS_MS = [0, 2000, 5000];
-    let lastError = "";
-    for (let attempt = 0; attempt < ATTEMPTS; attempt++) {
-      if (DELAYS_MS[attempt] > 0) {
-        await new Promise((r) => setTimeout(r, DELAYS_MS[attempt]));
-      }
-      const resp = await fetch(
-        `${endpointFor(model)}?key=${encodeURIComponent(params.apiKey)}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: requestBody,
-        },
-      );
-      if (resp.ok) {
-        const data = await resp.json();
-        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (!text) throw new Error("응답이 비어있습니다");
-        return text;
-      }
-      const errText = (await resp.text()).slice(0, 200);
-      lastError = `${resp.status}: ${errText}`;
-      if (!RETRYABLE.has(resp.status)) {
-        if (resp.status === 401 || resp.status === 403) {
-          throw new Error(`API 키가 유효하지 않습니다 (${resp.status})`);
-        }
-        if (resp.status === 400 || resp.status === 404) {
-          throw new Error(`MODEL_UNAVAILABLE: ${lastError}`);
-        }
-        throw new Error(`Gemini API ${lastError}`);
-      }
-    }
-    throw new Error(`RETRY_EXHAUSTED: ${model} ${lastError}`);
-  };
+  const resp = await fetch("/api/gemini-html", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: requestBody,
+  });
 
-  const callWithFallback = async (): Promise<string> => {
-    let lastMsg = "";
-    for (const model of MODEL_CHAIN) {
-      try {
-        return await callOne(model);
-      } catch (e) {
-        const msg = e instanceof Error ? e.message : String(e);
-        lastMsg = msg;
-        if (msg.includes("API 키가")) throw e;
-        if (msg.startsWith("RETRY_EXHAUSTED") || msg.startsWith("MODEL_UNAVAILABLE")) {
-          console.warn(`[Gemini] ${model} 실패, 다음 모델 시도:`, msg);
-          continue;
-        }
-        throw e;
-      }
+  if (!resp.ok) {
+    let errMsg = `요청 실패 (${resp.status})`;
+    try {
+      const errData = (await resp.json()) as { error?: string };
+      if (errData?.error) errMsg = errData.error;
+    } catch {
+      /* noop */
     }
-    throw new Error(
-      `Gemini 서버가 계속 혼잡합니다 (${MODEL_CHAIN.length}개 모델 모두 실패). 몇 분 후 다시 시도해주세요. [${lastMsg}]`,
-    );
-  };
+    throw new Error(errMsg);
+  }
 
-  const raw = await callWithFallback();
+  const data = (await resp.json()) as { text?: string };
+  const raw = data?.text;
+  if (!raw) throw new Error("서버 응답이 비어있습니다");
 
   let html = stripCodeFences(raw);
 

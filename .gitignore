@@ -7,6 +7,11 @@ dist-tsc-node
 .DS_Store
 .vite
 
+# Environment / secrets (Vercel 대시보드에서 관리)
+.env
+.env.*
+!.env.example
+
 # Generated/local artifacts
 .omc/
 graphify-out/
