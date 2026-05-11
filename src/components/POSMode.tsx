@@ -35,7 +35,7 @@ const SectionHeader = ({
   icon: typeof Star;
   children: React.ReactNode;
 }) => (
-  <h3 className="mb-2 inline-flex items-center gap-1.5 text-[13px] font-bold text-porcelain-800">
+  <h3 className="mb-2 flex items-center gap-1.5 text-[13px] font-bold text-porcelain-800">
     <Icon className="h-4 w-4 text-navy-600" />
     {children}
   </h3>
