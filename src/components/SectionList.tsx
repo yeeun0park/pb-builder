@@ -12,6 +12,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { GripVertical, Plus, X } from "lucide-react";
 import { useCampaignStore } from "@/lib/store";
 import type { Section, SectionType } from "@/lib/types";
 
@@ -41,29 +42,31 @@ const SectionRow = ({ section }: { section: Section }) => {
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex items-center gap-2 rounded border px-3 py-2 text-sm ${
+      className={`flex items-center gap-2 rounded-lg border px-3 py-2.5 text-[13px] transition ${
         selected
-          ? "border-theme bg-blue-50"
-          : "border-divider bg-white hover:border-gray-400"
+          ? "border-navy-600 bg-navy-50"
+          : "border-porcelain-200 bg-white hover:border-porcelain-400"
       }`}
     >
       <button
         type="button"
-        className="cursor-grab text-fg-muted active:cursor-grabbing"
+        className="cursor-grab rounded p-1 text-porcelain-500 hover:bg-porcelain-100 hover:text-navy-600 active:cursor-grabbing"
         {...attributes}
         {...listeners}
         title="드래그해서 순서 변경"
       >
-        ⋮⋮
+        <GripVertical className="h-4 w-4" />
       </button>
       <button
         type="button"
         onClick={() => select(section.id)}
         className="flex-1 text-left"
       >
-        <span className="font-bold">{SECTION_TYPE_LABELS[section.type]}</span>
+        <span className="font-bold text-porcelain-800">
+          {SECTION_TYPE_LABELS[section.type]}
+        </span>
         {section.type === "hero" && section.headline && (
-          <span className="ml-2 truncate text-fg-muted">
+          <span className="ml-2 truncate text-porcelain-600">
             {section.headline}
           </span>
         )}
@@ -71,10 +74,10 @@ const SectionRow = ({ section }: { section: Section }) => {
       <button
         type="button"
         onClick={() => remove(section.id)}
-        className="text-fg-muted hover:text-red-600"
+        className="rounded p-1 text-porcelain-500 transition hover:bg-accent-hot-tint hover:text-accent-hot"
         title="섹션 삭제"
       >
-        ×
+        <X className="h-3.5 w-3.5" />
       </button>
     </div>
   );
@@ -89,9 +92,10 @@ const AddSectionButton = () => {
           key={type}
           type="button"
           onClick={() => add(type)}
-          className="rounded border border-divider bg-white px-2 py-2 text-xs hover:border-theme hover:text-theme"
+          className="inline-flex items-center justify-center gap-1 rounded-lg border border-porcelain-300 bg-white px-2 py-2.5 text-[12px] font-bold text-porcelain-700 transition hover:border-navy-600 hover:bg-navy-50 hover:text-navy-600"
         >
-          + {SECTION_TYPE_LABELS[type]}
+          <Plus className="h-3 w-3" />
+          {SECTION_TYPE_LABELS[type]}
         </button>
       ))}
     </div>
@@ -115,9 +119,11 @@ export const SectionList = () => {
   };
 
   return (
-    <div className="flex flex-col gap-3 p-4">
+    <div className="flex flex-col gap-3 p-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-bold">섹션 ({sections.length})</h2>
+        <h2 className="text-[13px] font-bold text-porcelain-800">
+          섹션 ({sections.length})
+        </h2>
       </div>
       <DndContext
         sensors={sensors}
@@ -136,12 +142,12 @@ export const SectionList = () => {
         </SortableContext>
       </DndContext>
       {sections.length === 0 && (
-        <p className="text-center text-sm text-fg-muted">
+        <p className="text-center text-[13px] text-porcelain-500">
           아래에서 섹션을 추가하세요.
         </p>
       )}
-      <div className="border-t border-divider pt-3">
-        <p className="mb-2 text-xs text-fg-muted">섹션 추가</p>
+      <div className="border-t border-porcelain-200 pt-4">
+        <p className="mb-2 text-[12px] font-bold text-porcelain-600">섹션 추가</p>
         <AddSectionButton />
       </div>
     </div>

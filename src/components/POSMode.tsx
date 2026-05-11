@@ -1,4 +1,5 @@
 import { useState, type RefObject } from "react";
+import { Download } from "lucide-react";
 import { useCampaignStore } from "@/lib/store";
 import { readAsDataUrl } from "@/lib/imageUpload";
 import { samplePosCards } from "@/lib/posSamples";
@@ -72,15 +73,16 @@ export const POSMode = ({ previewRef }: Props) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-5 p-5">
       <section>
         <button
           type="button"
           onClick={exportJpg}
           disabled={exporting}
-          className="w-full rounded bg-theme px-3 py-2 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-navy-600 px-3 text-[15px] font-bold text-white shadow-pb-sm transition hover:bg-navy-700 disabled:cursor-not-allowed disabled:bg-porcelain-300 disabled:text-porcelain-600 disabled:shadow-none"
         >
-          {exporting ? "저장 중..." : "JPG로 저장 (800×600)"}
+          <Download className="h-4 w-4" />
+          {exporting ? "저장 중…" : "JPG로 저장 (800×600)"}
         </button>
       </section>
 

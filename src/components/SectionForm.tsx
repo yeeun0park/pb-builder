@@ -12,15 +12,15 @@ export const SectionForm = () => {
 
   if (!selected) {
     return (
-      <div className="p-4 text-center text-sm text-fg-muted">
+      <div className="p-5 text-center text-[13px] text-porcelain-500">
         섹션을 선택하면 편집 폼이 여기에 나타납니다.
       </div>
     );
   }
 
   return (
-    <div className="border-t border-divider p-4">
-      <h3 className="mb-3 text-sm font-bold">섹션 편집</h3>
+    <div className="border-t border-porcelain-200 p-5">
+      <h3 className="mb-3 text-[13px] font-bold text-porcelain-800">섹션 편집</h3>
       {selected.type === "hero" && <HeroForm section={selected} />}
       {selected.type === "fullbleed" && <FullbleedForm section={selected} />}
       {selected.type === "split" && <SplitForm section={selected} />}

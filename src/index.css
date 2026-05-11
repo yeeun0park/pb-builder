@@ -7,7 +7,7 @@
   src: url("/fonts/PBGothicRg.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-  font-display: block;
+  font-display: swap;
 }
 
 @font-face {
@@ -15,15 +15,26 @@
   src: url("/fonts/PBGothicBd.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
-  font-display: block;
+  font-display: swap;
 }
 
 :root {
-  --color-bg: #ffffff;
-  --color-fg: #1a1a1a;
-  --color-fg-muted: #6b6b6b;
-  --color-theme: #2b75b9;
-  --color-divider: #ededed;
+  /* PB design tokens — 별칭이 이 값을 참조해서 한 곳만 바꾸면 전역 반영됨 */
+  --color-canvas: #ffffff;
+  --color-canvas-soft: #fbfbfd;
+  --color-ink: #262b3c;
+  --color-ink-muted: #5e6679;
+  --color-navy-anchor: #09275a;
+  --color-divider-soft: #edeff4;
+
+  /* 기존 클래스가 참조하는 별칭 */
+  --color-bg: var(--color-canvas);
+  --color-fg: var(--color-ink);
+  --color-fg-muted: var(--color-ink-muted);
+  --color-theme: var(--color-navy-anchor);
+  --color-divider: var(--color-divider-soft);
+
+  --pb-focus-ring: 0 0 0 3px rgba(9, 39, 90, 0.18);
 }
 
 html,
@@ -33,7 +44,30 @@ body,
   margin: 0;
   background: var(--color-bg);
   color: var(--color-fg);
-  font-family: "PBGothic", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "PBGothic", "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕",
+    system-ui, sans-serif;
+  letter-spacing: -0.07em;
   word-break: keep-all;
   overflow-wrap: break-word;
+}
+
+@layer base {
+  input,
+  textarea,
+  select {
+    letter-spacing: -0.07em;
+  }
+  button {
+    letter-spacing: -0.05em;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="url"]:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    box-shadow: var(--pb-focus-ring);
+    border-color: var(--color-navy-anchor);
+  }
 }

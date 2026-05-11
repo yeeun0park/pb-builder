@@ -5,6 +5,7 @@ import {
   useState,
   type RefObject,
 } from "react";
+import { Boxes, Image as ImageIcon, Info, Palette, Rows2 } from "lucide-react";
 import { processImageFile } from "@/lib/imageUpload";
 import { useCampaignStore } from "@/lib/store";
 
@@ -652,8 +653,9 @@ export const HtmlDetailMode = ({ previewRef }: Props) => {
         >
           <div className="flex items-center gap-2">
             <span className="w-6 text-center text-xs text-fg-muted">#{i + 1}</span>
-            <span className="flex-1 truncate text-xs">
-              📦 같은 행 묶음 ({innerCount}개)
+            <span className="flex-1 inline-flex items-center gap-1.5 truncate text-xs">
+              <Rows2 className="h-3.5 w-3.5 text-navy-600" />
+              같은 행 묶음 ({innerCount}개)
             </span>
             <button
               type="button"
@@ -1074,15 +1076,21 @@ export const HtmlDetailMode = ({ previewRef }: Props) => {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <div className="rounded border border-blue-100 bg-blue-50 p-3 text-xs leading-relaxed text-fg-muted">
-        <strong className="text-fg">세부 조정 모드</strong>
-        <br />
-        프리뷰에서 글자를 바로 클릭해 수정하세요. 0.6초마다 자동 저장됩니다. 변경 사항은 우측 프리뷰에 즉시 반영됩니다.
+    <div className="flex flex-col gap-5 p-5">
+      <div className="flex items-start gap-2.5 rounded-lg bg-navy-50 px-3.5 py-3 text-[12px] leading-relaxed text-porcelain-700">
+        <Info className="mt-0.5 h-4 w-4 shrink-0 text-navy-600" />
+        <div>
+          <strong className="text-navy-600">세부 조정 모드</strong>
+          <br />
+          프리뷰에서 글자를 바로 클릭해 수정하세요. 0.6초마다 자동 저장되며 변경 사항이 즉시 반영됩니다.
+        </div>
       </div>
 
-      <div className="flex flex-col gap-2 border border-divider bg-white p-3">
-        <span className="text-sm font-bold">🎨 전체 텍스트 색상</span>
+      <div className="flex flex-col gap-3 rounded-lg border border-porcelain-200 bg-white p-4">
+        <span className="inline-flex items-center gap-1.5 text-[13px] font-bold text-porcelain-800">
+          <Palette className="h-4 w-4 text-navy-600" />
+          전체 텍스트 색상
+        </span>
         <p className="text-[11px] text-fg-muted">
           일괄 변경 — 아래 섹션 안의 개별 텍스트 설정보다 먼저 적용됩니다.
         </p>
@@ -1125,15 +1133,21 @@ export const HtmlDetailMode = ({ previewRef }: Props) => {
       </div>
 
       {sectionCards.length > 0 && (
-        <div className="flex flex-col gap-2 border border-divider bg-white p-3">
-          <span className="text-sm font-bold">🧩 섹션 ({sectionCards.length})</span>
+        <div className="flex flex-col gap-2 rounded-lg border border-porcelain-200 bg-white p-4">
+          <span className="inline-flex items-center gap-1.5 text-[13px] font-bold text-porcelain-800">
+            <Boxes className="h-4 w-4 text-navy-600" />
+            섹션 ({sectionCards.length})
+          </span>
           <div className="flex flex-col gap-2">{sectionCards}</div>
         </div>
       )}
 
       {imageCards.length > 0 && (
-        <div className="flex flex-col gap-2 border border-divider bg-white p-3">
-          <span className="text-sm font-bold">🖼️ 이미지 ({imageCards.length})</span>
+        <div className="flex flex-col gap-2 rounded-lg border border-porcelain-200 bg-white p-4">
+          <span className="inline-flex items-center gap-1.5 text-[13px] font-bold text-porcelain-800">
+            <ImageIcon className="h-4 w-4 text-navy-600" />
+            이미지 ({imageCards.length})
+          </span>
           <div className="flex flex-col gap-2">{imageCards}</div>
           <input
             ref={fileInputRef}

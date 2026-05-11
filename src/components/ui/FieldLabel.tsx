@@ -7,8 +7,8 @@ export const FieldLabel = ({
   label: string;
   children: ReactNode;
 }) => (
-  <label className="flex flex-col gap-1">
-    <span className="text-sm text-fg-muted">{label}</span>
+  <label className="flex flex-col gap-1.5">
+    <span className="text-[13px] font-bold text-porcelain-700">{label}</span>
     {children}
   </label>
 );

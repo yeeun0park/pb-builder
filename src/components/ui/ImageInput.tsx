@@ -1,4 +1,5 @@
 import { useRef, type ChangeEvent } from "react";
+import { ImagePlus } from "lucide-react";
 import {
   type ImageMeta,
   processImageFile,
@@ -25,22 +26,30 @@ export const ImageInput = ({ value, onChange, label }: Props) => {
 
   return (
     <div className="flex flex-col gap-2">
-      {label && <span className="text-sm text-fg-muted">{label}</span>}
+      {label && (
+        <span className="text-[13px] font-bold text-porcelain-700">
+          {label}
+        </span>
+      )}
       <div className="flex items-start gap-3">
-        <div
-          className="flex h-24 w-24 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded border border-divider bg-gray-50 text-xs text-fg-muted hover:border-theme"
+        <button
+          type="button"
           onClick={() => inputRef.current?.click()}
+          className="flex h-24 w-24 shrink-0 flex-col items-center justify-center gap-1 overflow-hidden rounded-lg border border-porcelain-300 bg-porcelain-50 text-[11px] text-porcelain-600 transition hover:border-navy-600 hover:text-navy-600"
         >
           {value ? (
             <img src={value} alt="" className="h-full w-full object-cover" />
           ) : (
-            "이미지 선택"
+            <>
+              <ImagePlus className="h-5 w-5" />
+              이미지 선택
+            </>
           )}
-        </div>
+        </button>
         {value && (
           <button
             type="button"
-            className="text-xs text-fg-muted underline hover:text-fg"
+            className="text-xs font-bold text-porcelain-600 underline-offset-2 transition hover:text-navy-600 hover:underline"
             onClick={() => onChange("")}
           >
             제거
