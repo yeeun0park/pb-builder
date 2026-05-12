@@ -64,7 +64,8 @@ export const Decoration = ({ decoration, update, remove }: Props) => {
     setDrag(null);
   };
 
-  const showOverlays = hovered && !drag;
+  const showDelete = hovered && !drag;
+  const showResize = (hovered && !drag) || drag?.kind === "resize";
 
   return (
     <div
@@ -91,7 +92,7 @@ export const Decoration = ({ decoration, update, remove }: Props) => {
         draggable={false}
         style={{ width: "100%", height: "100%", display: "block", pointerEvents: "none" }}
       />
-      {showOverlays && (
+      {showDelete && (
         <button
           type="button"
           aria-label="삭제"
@@ -123,7 +124,7 @@ export const Decoration = ({ decoration, update, remove }: Props) => {
           ×
         </button>
       )}
-      {showOverlays && (
+      {showResize && (
         <div
           aria-label="크기 조절"
           onPointerDown={(e) => startDrag(e, "resize")}
