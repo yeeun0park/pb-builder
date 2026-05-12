@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { MoveDiagonal } from "lucide-react";
 import type { Decoration as DecorationType } from "@/lib/posSchema";
 
 type Props = {
@@ -127,23 +128,31 @@ export const Decoration = ({ decoration, update, remove }: Props) => {
       {showResize && (
         <div
           aria-label="크기 조절"
+          title="모서리를 끌어 크기 조절"
           onPointerDown={(e) => startDrag(e, "resize")}
           onPointerMove={onMove}
           onPointerUp={onEnd}
           onPointerCancel={onEnd}
           style={{
             position: "absolute",
-            bottom: -6,
-            right: -6,
-            width: 14,
-            height: 14,
+            bottom: -9,
+            right: -9,
+            width: 20,
+            height: 20,
             background: "#3A4FB8",
             border: "2px solid white",
-            borderRadius: 2,
+            borderRadius: 4,
             cursor: "nwse-resize",
             touchAction: "none",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "white",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.25)",
           }}
-        />
+        >
+          <MoveDiagonal size={12} strokeWidth={2.5} />
+        </div>
       )}
     </div>
   );
