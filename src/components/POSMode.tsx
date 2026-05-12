@@ -119,14 +119,14 @@ export const POSMode = ({ previewRef }: Props) => {
       <section>
         <SectionHeader icon={Star}>샘플 불러오기</SectionHeader>
         <div className="flex flex-wrap gap-1.5">
-          {Object.entries(samplePosCards).map(([key, sample]) => (
+          {Object.entries(samplePosCards).map(([key, sample], index) => (
             <button
               key={key}
               type="button"
               onClick={() => setCard(sample)}
               className={chipBtnCls}
             >
-              {key}
+              샘플 {index + 1}
             </button>
           ))}
         </div>
