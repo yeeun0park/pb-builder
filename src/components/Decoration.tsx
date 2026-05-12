@@ -135,23 +135,23 @@ export const Decoration = ({ decoration, update, remove }: Props) => {
           onPointerCancel={onEnd}
           style={{
             position: "absolute",
-            bottom: -9,
-            right: -9,
+            bottom: -10,
+            right: -10,
             width: 20,
             height: 20,
-            background: "#3A4FB8",
-            border: "2px solid white",
-            borderRadius: 4,
+            background: "white",
+            border: "1.5px solid #1A2D5A",
+            borderRadius: "50%",
             cursor: "nwse-resize",
             touchAction: "none",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "white",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.25)",
+            color: "#1A2D5A",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.18)",
           }}
         >
-          <MoveDiagonal size={12} strokeWidth={2.5} />
+          <MoveDiagonal size={11} strokeWidth={2.5} />
         </div>
       )}
     </div>
