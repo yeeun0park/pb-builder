@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { MonitorSmartphone, RotateCcw, SlidersHorizontal, Sparkles, Star } from "lucide-react";
+import { Info, MonitorSmartphone, RotateCcw, SlidersHorizontal, Sparkles, Star } from "lucide-react";
 import { useCampaignStore } from "@/lib/store";
 import { sampleParanLabel } from "@/lib/samples";
 import type { EditorMode } from "@/lib/types";
@@ -95,8 +95,21 @@ export const Editor = () => {
             <DetailMode />
           )}
         </aside>
-        <section className="flex-1 bg-porcelain-100">
+        <section className="relative flex-1 bg-porcelain-100">
           <Preview ref={previewRef} mode={mode} />
+          {mode === "pos" && (
+            <div className="pointer-events-none absolute bottom-5 right-5 max-w-[260px] rounded-lg border border-porcelain-200 bg-white/95 px-3.5 py-2.5 text-[11px] leading-relaxed text-porcelain-700 shadow-pb-sm backdrop-blur">
+              <div className="mb-1 flex items-center gap-1.5 text-navy-600">
+                <Info className="h-3.5 w-3.5" />
+                <strong className="text-[11px]">사용 가이드</strong>
+              </div>
+              <ul className="space-y-0.5">
+                <li>· 텍스트 블록을 위·아래로 드래그하면 위치 조정</li>
+                <li>· 데코는 자유롭게 이동, 모서리 핸들로 크기 조절</li>
+                <li>· 이미지를 미리보기에 드래그하면 키비주얼 업로드</li>
+              </ul>
+            </div>
+          )}
         </section>
       </div>
     </div>

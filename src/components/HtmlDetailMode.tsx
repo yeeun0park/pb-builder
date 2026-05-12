@@ -1083,7 +1083,7 @@ export const HtmlDetailMode = ({ previewRef }: Props) => {
         <div>
           <strong className="text-navy-600">세부 조정 모드</strong>
           <br />
-          프리뷰에서 글자를 바로 클릭해 수정하세요. 0.6초마다 자동 저장되며 변경 사항이 즉시 반영됩니다.
+          <strong>AI 자동 생성</strong> 결과를 다듬는 단계예요. 프리뷰에서 글자를 바로 클릭해 수정하면 0.6초마다 자동 저장됩니다.
         </div>
       </div>
 
